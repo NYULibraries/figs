@@ -20,7 +20,14 @@ namespace :figaro do
     env.merge!(Hash[*args[:vars].split(/[\s=]/)]) if args[:vars]
     vars = env.map{|k,v| "#{k}=#{v}" }.sort.join(" ")
     secure = Base64.encode64(rsa.public_encrypt(vars)).rstrip
-    yaml = YAML.dump("env" => {"secure" => secure})
-    Rails.root.join(".travis.yml").open("w"){|f| f.write(yaml) }
+    path = Rails.root.join(".travis.yml")
+    if path.exist?
+      travis = YAML.load_file(path)
+      travis["env"] = {"secure" => secure}
+      yaml = YAML.dump(travis)
+    else
+      yaml = YAML.dump("env" => {"secure" => secure})
+    end
+    path.open("w"){|f| f.write(yaml) }
   end
 end
