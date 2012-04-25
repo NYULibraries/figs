@@ -2,7 +2,7 @@
 
 Simple Rails app configuration
 
-## What is this for?
+## What is this?
 
 Figaro is for configuring Rails (3 and 4) apps, especially open source Rails apps.
 
