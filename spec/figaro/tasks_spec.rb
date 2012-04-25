@@ -101,7 +101,11 @@ describe Figaro::Tasks do
         decrypted.should == "FOO=bar HELLO=world"
       end
 
-      it "merges additional vars"
+      it "merges additional vars" do
+        Figaro.stub(:env => {"HELLO" => "world", "FOO" => "bar"})
+        task.invoke("LASER=lemon FOO=baz")
+        decrypted.should == "FOO=baz HELLO=world LASER=lemon"
+      end
     end
 
     context "with no env in .travis.yml" do
