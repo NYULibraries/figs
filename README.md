@@ -52,7 +52,7 @@ Pusher.secret = Figaro.env.pusher_secret
 
 But wait… I thought configuration via constant was bad! Well, this is different. Rather than storing a _copy_ of `ENV` internally, `Figaro.env` passes directly through to `ENV`, making it just like using `ENV` itself. So why two approaches? Having your configurations available via method calls makes it easy to stub them out in tests. Either way is fine. The choice is yours!
 
-If your app requires Rails-environment-specific configuration, you can also namespace your configuration under a key representing `Rails.env` in `application.yml`.
+If your app requires `Rails.env`-specific configuration, you can namespace your configuration under a key representing `Rails.env` in `application.yml`.
 
 ```yaml
 HELLO: world
@@ -96,7 +96,7 @@ No problem. Just add `config/application.yml` to your production app on the serv
 
 ## <a id="travis" name="travis"></a>Give me Travis or give me death!
 
-Okay, okay. Travis allows you to add an `env` configuration to your `.travis.yml` file, which is then included in `ENV` during your build.
+Okay, okay. Travis allows you to add an `env` configuration to your `.travis.yml`, which is included in `ENV` during your build.
 
 ```yaml
 language: ruby
