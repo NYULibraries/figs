@@ -1,4 +1,5 @@
 require "spec_helper"
+require "active_support/core_ext/string/strip"
 
 describe Figaro::Tasks do
   describe ".heroku" do
@@ -108,7 +109,7 @@ describe Figaro::Tasks do
 
     context "with no env in .travis.yml" do
       before do
-        write_travis_yml("language: ruby")
+        write_travis_yml(%(language: "ruby"))
       end
 
       it "appends env to .travis.yml" do
@@ -121,6 +122,41 @@ describe Figaro::Tasks do
         task.invoke("LASER=lemon FOO=baz")
         decrypted.should == "FOO=baz HELLO=world LASER=lemon"
         travis_yml["language"].should == "ruby"
+      end
+
+      it "preserves existing formatting" do
+        task.invoke
+        File.read(travis_path).should match /^language: "ruby"/
+      end
+    end
+
+    context "with env in .travis.yml" do
+      it "clobbers a single env" do
+        write_travis_yml(<<-EOF.strip_heredoc)
+          env: LASER=tag
+          language: "ruby"
+          EOF
+        task.invoke
+        decrypted.should == "FOO=bar HELLO=world"
+        File.read(travis_path).rstrip.should == <<-EOF.strip_heredoc.rstrip
+          language: "ruby"
+          env: {secure: #{travis_yml["env"]["secure"]}}
+          EOF
+      end
+
+      it "clobbers multiple envs" do
+        write_travis_yml(<<-EOF.strip_heredoc)
+          env:
+            - LASER=tag
+            - LEMON=zest
+          language: "ruby"
+          EOF
+        task.invoke
+        decrypted.should == "FOO=bar HELLO=world"
+        File.read(travis_path).rstrip.should == <<-EOF.strip_heredoc.rstrip
+          language: "ruby"
+          env: {secure: #{travis_yml["env"]["secure"]}}
+          EOF
       end
     end
   end

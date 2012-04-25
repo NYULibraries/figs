@@ -19,11 +19,11 @@ namespace :figaro do
     env = Figaro.env
     env.merge!(Hash[*args[:vars].split(/[\s=]/)]) if args[:vars]
     vars = env.map{|k,v| "#{k}=#{v}" }.sort.join(" ")
-    secure = Base64.encode64(rsa.public_encrypt(vars)).rstrip
+    secure = Base64.encode64(rsa.public_encrypt(vars)).gsub(/\s/, "")
     path = Rails.root.join(".travis.yml")
-    travis = path.exist? && YAML.load_file(path) || {}
-    travis["env"] = {"secure" => secure}
-    yaml = YAML.dump(travis)
+    content = path.exist? ? File.read(path) : ""
+    content.sub!(/^env:[^\n]*\n(^[ \t]+[^\n]*\n)*/m, "")
+    yaml = content.rstrip << "\nenv: {secure: #{secure}}"
     path.open("w"){|f| f.write(yaml) }
   end
 end
