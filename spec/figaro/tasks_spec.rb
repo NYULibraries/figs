@@ -60,8 +60,29 @@ describe Figaro::Tasks do
   end
 
   describe "figaro:travis" do
+    let(:travis_path){ ROOT.join("tmp/.travis.yml") }
+
+    before do
+      Rails.stub(:root => ROOT.join("tmp"))
+    end
+
+    after do
+      travis_path.delete if travis_path.exist?
+    end
+
+    def write_travis_yml(content)
+      travis_path.open("w"){|f| f.write(content) }
+    end
+
+    def travis_yml
+      travis_path.read
+    end
+
     context "with no .travis.yml" do
       it "creates .travis.yml" do
+        task.invoke
+        travis_path.should exist
+      end
 
       it "adds encrypted vars to .travis.yml env"
 
