@@ -58,4 +58,26 @@ describe Figaro::Tasks do
       end
     end
   end
+
+  describe "figaro:travis" do
+    context "with no .travis.yml" do
+      it "creates .travis.yml" do
+
+      it "adds encrypted vars to .travis.yml env"
+
+      it "merges additional vars"
+    end
+
+    context "with no env in .travis.yml" do
+      it "appends env to .travis.yml"
+
+      it "merges additional vars"
+    end
+
+    context "with existing env in .travis.yml" do
+      it "merges into existing .travis.yml env(s)"
+
+      it "merges additional vars"
+    end
+  end
 end
