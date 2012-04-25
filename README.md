@@ -107,7 +107,7 @@ env: FOO=bar HELLO=world
 
 That's pretty handy, but `.travis.yml` is checked into your repo so for open source apps, this puts your private configurations out in the wild.
 
-Fortunately, Travis recently enabled [encrypted `env` configuration](https://github.com/travis-ci/travis-core/pull/45). The process of manually encrypting your `env` is pretty convoluted, but don't worry… **Figaro will do it for you!**
+Fortunately, Travis recently enabled [secure env configuration](https://github.com/travis-ci/travis-core/pull/45). The process of manually encrypting your `env` is pretty convoluted, but don't worry… **Figaro will do it for you!**
 
 If your app is already on Travis and using Figaro, just:
 
