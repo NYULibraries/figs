@@ -64,13 +64,12 @@ describe Figaro::Tasks do
     let(:rsa){ OpenSSL::PKey::RSA.generate(1024) }
     let(:public_key){ rsa.public_key.to_s }
     let(:private_key){ rsa.to_pem }
+    let(:travis_yml){ YAML.load_file(travis_path) }
+    let(:decrypted){ decrypt(travis_yml["env"]) }
 
     before do
       Rails.stub(:root => ROOT.join("tmp"))
-      Kernel.should_receive(:system).with("git remote --verbose").and_return(<<-EOF)
-origin\tgit@github.com:bogus/repo.git (fetch)
-origin\tgit@github.com:bogus/repo.git (push)
-EOF
+      Kernel.should_receive(:system).with("git remote --verbose").and_return("origin\tgit@github.com:bogus/repo.git (fetch)\norigin\tgit@github.com:bogus/repo.git (push)")
       stub_request(:get, "http://travis-ci.org/bogus/repo.json").to_return(:body => JSON.generate({"public_key" => public_key}))
     end
 
@@ -82,8 +81,12 @@ EOF
       travis_path.open("w"){|f| f.write(content) }
     end
 
-    def travis_yml
-      YAML.load(travis_path.read)
+    def decrypt(value)
+      case value
+      when Hash then rsa.private_decrypt(Base64.decode64(value["secure"]))
+      when Array then value.map{|v| decrypt(v) }
+      else value
+      end
     end
 
     context "with no .travis.yml" do
@@ -95,9 +98,6 @@ EOF
       it "adds encrypted vars to .travis.yml env" do
         Figaro.stub(:env => {"HELLO" => "world", "FOO" => "bar"})
         task.invoke
-        encrypted = travis_yml["env"]["secure"]
-        decoded = Base64.decode64(encrypted)
-        decrypted = rsa.private_decrypt(decoded)
         decrypted.should == "FOO=bar HELLO=world"
       end
 
