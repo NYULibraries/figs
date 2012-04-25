@@ -8,19 +8,19 @@ Figaro is for configuring Rails (3 and 4) apps, especially open source Rails app
 
 Open sourcing a Rails app can be a little tricky when it comes to sensitive configuration information like [Pusher](http://pusher.com/) or [Stripe](https://stripe.com/) credentials. You don't want to check private credentials into the repo but what other choice is there?
 
-Figaro provides a clean and simple way to configure your app and keep the private stuff… private.
+Figaro provides a clean and simple way to configure your app and keep the private stuff… _private_.
 
 ## How does it work?
 
 There are a few similar solutions out there, and a lot of homegrown attempts. Most namespace your configuration under a `Config` (or similar) namespace. That's fine, but there's already a place to describe the application environment… `ENV`!
 
-`ENV` is a collection of simple string key/value pairs and it works just great for application configuration.
+`ENV` is a collection of simple string key/value pairs and its perfect for application configuration.
 
-As an added bonus, this is exactly how apps on [Heroku](http://www.heroku.com/) are configured. So if you configure your Rails app using `ENV`, you're already set to deploy to Heroku.
+**BONUS**: This is exactly how apps on [Heroku](http://www.heroku.com/) are configured. So if you configure your with Figaro, you're ready to deploy on Heroku.
 
 ## Give me an example.
 
-Okay. Add Figaro to your bundle:
+Okay. First, add Figaro to your Gemfile and bundle:
 
 ```ruby
 gem "figaro"
@@ -32,7 +32,7 @@ Next up, install Figaro:
 $ rails generate figaro:install
 ```
 
-This generates a commented `config/application.yml` file and ignores it in your `.gitignore`. Add your own configuration to this file and you're done!
+This generates a commented-out `config/application.yml` file and ignores it in your `.gitignore`. Add your own configuration to this file and you're done!
 
 Your configuration will be available as key/value pairs in `ENV`. For example, here's `config/initializers/pusher.rb`:
 
@@ -52,14 +52,12 @@ Pusher.secret = Figaro.env.pusher_secret
 
 But wait… I thought configuration via constant was bad! Well, this is different. Rather than storing a _copy_ of `ENV` internally, `Figaro.env` passes directly through to `ENV`, making it just like using `ENV` itself. So why two approaches? Having your configurations available via method calls makes it easy to stub them out in tests. Either way is fine. The choice is yours!
 
-If your app requires Rails-environment-specific configuration, you can also namespace your configuration under a key for `Rails.env`.
+If your app requires Rails-environment-specific configuration, you can also namespace your configuration under a key representing `Rails.env` in `application.yml`.
 
 ```yaml
 HELLO: world
 development:
   HELLO: developers
-production:
-  HELLO: users
 ```
 
 In this case, `ENV["HELLO"]` will produce `"developers"` in development, `"users"` in production and `"world"` otherwise.
@@ -98,16 +96,16 @@ No problem. Just add `config/application.yml` to your production app on the serv
 
 ## Give me Travis or give me death!
 
-Okay, okay. So Travis allows you to add an `env` configuration to your `.travis.yml` file, which is then included in `ENV` during your build.
+Okay, okay. Travis allows you to add an `env` configuration to your `.travis.yml` file, which is then included in `ENV` during your build.
 
 ```yaml
 language: ruby
 env: FOO=bar HELLO=world
 ```
 
-That's pretty handy, but `.travis.yml` is checked into your repo so for open source apps, this puts your private configurations out in the wild.
+That's pretty handy. The problem is that `.travis.yml` is checked into your repo, so for open source apps, this puts your private configurations out in the wild.
 
-Fortunately, Travis recently enabled [secure env configuration](https://github.com/travis-ci/travis-core/pull/45). The process of manually encrypting your `env` is pretty convoluted, but don't worry… **Figaro will do it for you!**
+Fortunately, Travis recently shipped [secure env configuration](https://github.com/travis-ci/travis-core/pull/45). The process of manually encrypting your `env` is pretty convoluted, but don't worry… **Figaro does it for you!**
 
 If your app is already on Travis and using Figaro, just:
 
@@ -128,6 +126,8 @@ If you need to include additional, Travis-specific configuration variables, you 
 $ rake figaro:travis[FOO=baz CI=true]
 ```
 
+**REASSURANCE**: If you're still worried about the security of your encrypted configuration, don't be. Each project on Travis gets a secure public/private key pair. The private key is never exposed outside of Travis and the public key is… [_public_](http://travis-ci.org/laserlemon/figaro.json). Figaro encrypts using the public key and only Travis can decrypt using the private key.
+
 ## This sucks. How can I make it better?
 
 1. Fork it.
@@ -136,6 +136,6 @@ $ rake figaro:travis[FOO=baz CI=true]
 
 ## Does Figaro have a mascot?
 
-Yes.
+Why, yes!
 
 [![Figaro](http://images2.wikia.nocookie.net/__cb20100628192722/disney/images/5/53/Pinocchio-pinocchio-4947890-960-720.jpg "Figaro's mascot: Figaro")](http://en.wikipedia.org/wiki/Figaro_(Disney\))
