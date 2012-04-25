@@ -2,7 +2,7 @@
 
 Simple Rails app configuration
 
-## What is this?
+## <a id="what" name="what"></a>What is this?
 
 Figaro is for configuring Rails (3 and 4) apps, especially open source Rails apps.
 
@@ -10,7 +10,7 @@ Open sourcing a Rails app can be a little tricky when it comes to sensitive conf
 
 Figaro provides a clean and simple way to configure your app and keep the private stuff… _private_.
 
-## How does it work?
+## <a id="how" name="how"></a>How does it work?
 
 There are a few similar solutions out there, and a lot of homegrown attempts. Most namespace your configuration under a `Config` (or similar) namespace. That's fine, but there's already a place to describe the application environment… `ENV`!
 
@@ -18,7 +18,7 @@ There are a few similar solutions out there, and a lot of homegrown attempts. Mo
 
 **BONUS**: This is exactly how apps on [Heroku](http://www.heroku.com/) are configured. So if you configure your with Figaro, you're ready to deploy on Heroku.
 
-## Give me an example.
+## <a id="example" name="example"></a>Give me an example.
 
 Okay. First, add Figaro to your Gemfile and bundle:
 
@@ -62,7 +62,7 @@ development:
 
 In this case, `ENV["HELLO"]` will produce `"developers"` in development, `"users"` in production and `"world"` otherwise.
 
-## How does it work with Heroku?
+## <a id="heroku" name="heroku"></a>How does it work with Heroku?
 
 Heroku's beautifully simple application configuration was the [inspiration](http://laserlemon.com/blog/2011/03/08/heroku-friendly-application-configuration/) for Figaro.
 
@@ -94,7 +94,7 @@ Additionally, if `RAILS_ENV` is configured on your Heroku server, Figaro will us
 
 No problem. Just add `config/application.yml` to your production app on the server.
 
-## Give me Travis or give me death!
+## <a id="travis" name="travis"></a>Give me Travis or give me death!
 
 Okay, okay. Travis allows you to add an `env` configuration to your `.travis.yml` file, which is then included in `ENV` during your build.
 
@@ -128,13 +128,13 @@ $ rake figaro:travis[FOO=baz CI=true]
 
 **REASSURANCE**: If you're still worried about the security of your encrypted configuration, don't be. Each project on Travis gets a secure public/private key pair. The private key is never exposed outside of Travis and the public key is… [_public_](http://travis-ci.org/laserlemon/figaro.json). Figaro encrypts using the public key and only Travis can decrypt using the private key.
 
-## This sucks. How can I make it better?
+## <a id="sucks" name="sucks"></a>This sucks. How can I make it better?
 
 1. Fork it.
 2. Make it better.
 3. Send me a pull request.
 
-## Does Figaro have a mascot?
+## <a id="mascot" name="mascot"></a>Does Figaro have a mascot?
 
 Why, yes!
 
