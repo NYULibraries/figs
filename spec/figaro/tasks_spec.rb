@@ -61,9 +61,17 @@ describe Figaro::Tasks do
 
   describe "figaro:travis" do
     let(:travis_path){ ROOT.join("tmp/.travis.yml") }
+    let(:rsa){ OpenSSL::PKey::RSA.generate(1024) }
+    let(:public_key){ rsa.public_key.to_s }
+    let(:private_key){ rsa.to_pem }
 
     before do
       Rails.stub(:root => ROOT.join("tmp"))
+      Kernel.should_receive(:system).with("git remote --verbose").and_return(<<-EOF)
+origin\tgit@github.com:bogus/repo.git (fetch)
+origin\tgit@github.com:bogus/repo.git (push)
+EOF
+      stub_request(:get, "http://travis-ci.org/bogus/repo.json").to_return(:body => JSON.generate({"public_key" => public_key}))
     end
 
     after do
@@ -75,7 +83,7 @@ describe Figaro::Tasks do
     end
 
     def travis_yml
-      travis_path.read
+      YAML.load(travis_path.read)
     end
 
     context "with no .travis.yml" do
@@ -84,7 +92,14 @@ describe Figaro::Tasks do
         travis_path.should exist
       end
 
-      it "adds encrypted vars to .travis.yml env"
+      it "adds encrypted vars to .travis.yml env" do
+        Figaro.stub(:env => {"HELLO" => "world", "FOO" => "bar"})
+        task.invoke
+        encrypted = travis_yml["env"]["secure"]
+        decoded = Base64.decode64(encrypted)
+        decrypted = rsa.private_decrypt(decoded)
+        decrypted.should == "FOO=bar HELLO=world"
+      end
 
       it "merges additional vars"
     end
