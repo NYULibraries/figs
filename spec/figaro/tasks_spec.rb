@@ -107,14 +107,21 @@ describe Figaro::Tasks do
     end
 
     context "with no env in .travis.yml" do
-      it "appends env to .travis.yml" do
+      before do
         write_travis_yml("language: ruby")
+      end
+
+      it "appends env to .travis.yml" do
         task.invoke
         decrypted.should == "FOO=bar HELLO=world"
         travis_yml["language"].should == "ruby"
       end
 
-      it "merges additional vars"
+      it "merges additional vars" do
+        task.invoke("LASER=lemon FOO=baz")
+        decrypted.should == "FOO=baz HELLO=world LASER=lemon"
+        travis_yml["language"].should == "ruby"
+      end
     end
 
     context "with existing env in .travis.yml" do
