@@ -1,4 +1,6 @@
-branches: master
+branches:
+  - master
+  - travis
 gemfile:
   - gemfiles/rails30.gemfile
   - gemfiles/rails31.gemfile
