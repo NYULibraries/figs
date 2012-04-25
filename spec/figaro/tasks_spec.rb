@@ -76,6 +76,7 @@ describe Figaro::Tasks do
     end
 
     before do
+      FileUtils.mkdir_p(ROOT.join("tmp"))
       Figaro.stub(:env => {"HELLO" => "world", "FOO" => "bar"})
       Rails.stub(:root => ROOT.join("tmp"))
       Kernel.should_receive(:system).with("git remote --verbose").and_return("origin\tgit@github.com:bogus/repo.git (fetch)\norigin\tgit@github.com:bogus/repo.git (push)")
@@ -84,6 +85,7 @@ describe Figaro::Tasks do
 
     after do
       travis_path.delete if travis_path.exist?
+      FileUtils.rm_r(ROOT.join("tmp"))
     end
 
     context "with no .travis.yml" do
