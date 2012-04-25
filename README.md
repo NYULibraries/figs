@@ -92,9 +92,41 @@ rake figaro:heroku[my-awesome-app]
 
 Additionally, if `RAILS_ENV` is configured on your Heroku server, Figaro will use that environment automatically in determining your proper configuration.
 
-## What if I'm not using Heroku?
+### What if I'm not using Heroku?
 
 No problem. Just add `config/application.yml` to your production app on the server.
+
+## Give me Travis or give me death!
+
+Okay, okay. So Travis allows you to add an `env` configuration to your `.travis.yml` file, which is then included in `ENV` during your build.
+
+```yaml
+language: ruby
+env: FOO=bar HELLO=world
+```
+
+That's pretty handy, but `.travis.yml` is checked into your repo so for open source apps, this puts your private configurations out in the wild.
+
+Fortunately, Travis recently enabled [encrypted `env` configuration](https://github.com/travis-ci/travis-core/pull/45). The process of manually encrypting your `env` is pretty convoluted, but don't worry… **Figaro will do it for you!**
+
+If your app is already on Travis and using Figaro, just:
+
+```bash
+rake figaro:travis
+```
+
+This wraps up your Figaro configuration, encrypts it and adds it to your `.travis.yml` file:
+
+```yaml
+language: ruby
+env: {secure: ec7ij5JLi8t3w5sq1ymG/xo6k0XYAfqENw8UQjT44BwsmJrlZZr75pLW/IvfJXn1JpthRuQsdO6ba0aozYIDmswwsY/LbqYutHvEaIZSy9Eo5VISGeZdbhRSe9fIXgXKNnWMBLDez81cGhdumMs0LkwrQiQr5nk06yt8gndr2Dg=}
+```
+
+If you need to include additional, Travis-specific configuration variables, you can do so right in the rake task:
+
+```bash
+rake figaro:travis[FOO=baz CI=true]
+```
 
 ## This sucks. How can I make it better?
 
