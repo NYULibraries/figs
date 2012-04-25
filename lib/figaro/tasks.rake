@@ -3,4 +3,8 @@ namespace :figaro do
   task :heroku, [:app] => :environment do |_, args|
     Figaro::Tasks.heroku(args[:app])
   end
+
+  desc "Configure Travis according to application.yml"
+  task :travis, [:vars] => :environment do
+  end
 end
