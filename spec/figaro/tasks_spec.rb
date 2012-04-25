@@ -123,11 +123,5 @@ describe Figaro::Tasks do
         travis_yml["language"].should == "ruby"
       end
     end
-
-    context "with existing env in .travis.yml" do
-      it "merges into existing .travis.yml env(s)"
-
-      it "merges additional vars"
-    end
   end
 end

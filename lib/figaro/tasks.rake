@@ -21,13 +21,9 @@ namespace :figaro do
     vars = env.map{|k,v| "#{k}=#{v}" }.sort.join(" ")
     secure = Base64.encode64(rsa.public_encrypt(vars)).rstrip
     path = Rails.root.join(".travis.yml")
-    if path.exist?
-      travis = YAML.load_file(path)
-      travis["env"] = {"secure" => secure}
-      yaml = YAML.dump(travis)
-    else
-      yaml = YAML.dump("env" => {"secure" => secure})
-    end
+    travis = path.exist? && YAML.load_file(path) || {}
+    travis["env"] = {"secure" => secure}
+    yaml = YAML.dump(travis)
     path.open("w"){|f| f.write(yaml) }
   end
 end
