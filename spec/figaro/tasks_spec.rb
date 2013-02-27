@@ -60,7 +60,7 @@ describe Figaro::Tasks do
     end
   end
 
-  describe "figaro:travis" do
+  describe "figaro:travis", :rake => true do
     let(:travis_path){ ROOT.join("tmp/.travis.yml") }
     let(:rsa){ OpenSSL::PKey::RSA.generate(1024) }
     let(:public_key){ rsa.public_key.to_s }

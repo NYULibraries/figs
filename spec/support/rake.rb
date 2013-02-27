@@ -2,7 +2,11 @@ require "rake"
 
 shared_context "rake", :rake => true do
   let(:rake) { Rake.application = Rake::Application.new }
-  let(:name) { self.class.ancestors.map(&:description).grep(/^figaro:/).first }
+  let(:name) do
+    example.example_group.parent_groups.detect { |group|
+      group.description =~ /^figaro:/
+    }.description
+  end
   let(:task) { rake[name] }
 
   before do
