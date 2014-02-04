@@ -3,7 +3,7 @@ if ENV["COVERAGE"]
   Coveralls.wear!
 end
 
-require "figaro"
+require "figs"
 
 require "bundler"
 Bundler.require(:test)

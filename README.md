@@ -1,4 +1,8 @@
-# Figaro
+# Fig
+
+Railsless figaro.
+
+## Figaro
 [![Gem Version](https://badge.fury.io/rb/figaro.png)](http://badge.fury.io/rb/figaro)
 [![Build Status](https://travis-ci.org/laserlemon/figaro.png?branch=master)](https://travis-ci.org/laserlemon/figaro)
 [![Code Climate](https://codeclimate.com/github/laserlemon/figaro.png)](https://codeclimate.com/github/laserlemon/figaro)

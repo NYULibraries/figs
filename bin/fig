@@ -1,0 +1,5 @@
+#!/usr/bin/env ruby
+
+require "figs/install"
+
+Figs::Install.new.run

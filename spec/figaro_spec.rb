@@ -7,21 +7,21 @@ describe Figaro do
     end
   end
 
-  describe ".backend" do
-    let(:backend) { double(:backend) }
-
-    it "defaults to the Rails application backend" do
-      expect(Figaro.backend).to eq(Figaro::Rails::Application)
-    end
-
-    it "is configurable" do
-      expect {
-        Figaro.backend = backend
-      }.to change {
-        Figaro.backend
-      }.from(Figaro::Rails::Application).to(backend)
-    end
-  end
+  # describe ".backend" do
+  #   let(:backend) { double(:backend) }
+  # 
+  #   it "defaults to the Rails application backend" do
+  #     expect(Figaro.backend).to eq(Figaro::Rails::Application)
+  #   end
+  # 
+  #   it "is configurable" do
+  #     expect {
+  #       Figaro.backend = backend
+  #     }.to change {
+  #       Figaro.backend
+  #     }.from(Figaro::Rails::Application).to(backend)
+  #   end
+  # end
 
   describe ".application" do
     let(:backend) { double(:backend) }

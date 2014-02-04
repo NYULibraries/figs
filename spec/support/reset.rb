@@ -1,6 +1,6 @@
 RSpec.configure do |config|
   config.before do
-    Figaro.backend = nil
-    Figaro.application = nil
+    Fig.backend = nil
+    Fig.application = nil
   end
 end

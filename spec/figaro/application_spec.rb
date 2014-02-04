@@ -89,7 +89,7 @@ module Figaro
 
     describe "#configuration" do
       def yaml_to_path(yaml)
-        Tempfile.open("figaro") do |file|
+        Tempfile.open("fig") do |file|
           file.write(yaml)
           file.path
         end
@@ -188,7 +188,7 @@ YAML
 
       before do
         ::ENV.delete("foo")
-        ::ENV.delete("_FIGARO_foo")
+        ::ENV.delete("_FIG_foo")
 
         application.stub(configuration: { "foo" => "bar" })
       end
