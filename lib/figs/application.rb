@@ -3,6 +3,7 @@ require "yaml"
 
 require "figs/error"
 require "figs/env"
+require "figs/git"
 
 module Figs
   class Application
@@ -10,11 +11,20 @@ module Figs
 
     include Enumerable
 
-    attr_writer :path, :environment
+    attr_writer :environment
 
-    def initialize(options = {})
-      @path = options[:path]
-      @environment = options[:environment]
+    def initialize(file)
+      @figfile = file
+      load_path
+      @environment = 'staging'#options[:environment]
+    end
+    
+    def load_path
+      if @figfile["method"].eql? "git"
+        @path = Figs::Git.location @figfile["location"]
+      else
+        @path = @figfile["location"]
+      end
     end
 
     def path
@@ -33,6 +43,7 @@ module Figs
       each do |key, value|
         set(key, value) unless skip?(key)
       end
+      Figs::Git.delete_after_loading
     end
     
     def env
