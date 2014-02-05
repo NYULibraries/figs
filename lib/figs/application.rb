@@ -74,8 +74,6 @@ module Figs
       non_string_configuration!(key) unless key.is_a?(String)
       non_string_configuration!(value) unless value.is_a?(String)
       
-      require 'debugger';debugger
-      
       # Figs::ENV.set_array(key, value) unless !value.is_a?(Array)
       ::ENV[key.to_s] = value.to_s
       ::ENV[FIG_ENV_PREFIX + key.to_s] = value.to_s
