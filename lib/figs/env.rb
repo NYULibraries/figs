@@ -1,5 +1,5 @@
 module Figs
-  module Env
+  module ENV
     extend self
     def env
      @env ||= ::ENV
@@ -14,9 +14,30 @@ module Figs
       soup[key] = value unless key.is_a?(String) && value.is_a?(String)
     end
     
-    def get(key)
-      return env[key] unless soup.key?(key)
-      return soup[key]
+    def []key
+      return soup[key] if soup.key?(key)
+      return env[key]
+    end
+    
+    def []=(key,value)
+      set(key, value)
+    end
+    
+    def method_missing(meth, *args, &block)
+      # Check to see if it can be evaluated
+      if(matches? meth)
+        env.send meth, *args, &block
+      else
+        super
+      end
+    end
+    
+    def respond_to? meth
+      matches? meth
+    end
+    
+    def matches? meth
+      env.respond_to? meth
     end
   end
 end

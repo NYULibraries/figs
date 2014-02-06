@@ -23,6 +23,12 @@ module Figs
     application.load
   end
   
+  
+  
+  def figs
+    Figs::ENV
+  end
+  
   private
   
   def figfile
