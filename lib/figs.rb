@@ -16,11 +16,11 @@ module Figs
   end
 
   def application(options = {})
-    @application ||= backend.new({:file => figfile, :environment => options[:environment]})
+    @application ||= backend.new({:file => figfile, :stage => options[:stage]})
   end
 
   def load(options = {})
-    application({:environment => options[:environment]}).load
+    application({:stage => options[:stage]}).load
   end
   
   private

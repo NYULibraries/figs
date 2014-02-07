@@ -12,7 +12,8 @@ Gem::Specification.new do |gem|
   gem.license     = "MIT"
 
   gem.add_development_dependency "rake", "~> 10.1"
-
+  gem.add_dependency "hashie", "~> 2.0.5"
+  
   # gem.files      = `git ls-files`.split($\)
   # gem.test_files = gem.files.grep(/^spec/)
   gem.executables << "figsify"

@@ -1,12 +1,18 @@
+require 'hashie'
 module Figs
   module ENV
     extend self
+    
+    class EnvObjects < Hash
+      include Hashie::Extensions::MethodAccess
+    end
+    
     def env
      @env ||= ::ENV
     end
     
     def env_objects
-      @env_objects ||= Hash.new
+      @env_objects ||= EnvObjects.new
     end
     
     def set(key,value)

@@ -11,17 +11,17 @@ module Figs
 
     include Enumerable
 
-    attr_writer :environment
+    attr_writer :stage
 
     def initialize(options = {})
       @figfile = options[:file]
-      @environment = options[:environment]
+      @stage = options[:stage]
       load_path
     end
     
     def load_path
       if @figfile["method"].eql? "git"
-        @path = Figs::Git.location(@figfile["location"], @environment)
+        @path = Figs::Git.location(@figfile["location"], @stage)
       else
         @path = @figfile["location"]
       end
@@ -31,12 +31,12 @@ module Figs
       (@path || default_path).to_s
     end
 
-    def environment
-      (@environment || default_environment).to_s
+    def stage
+      (@stage || default_stage).to_s
     end
 
     def configuration
-      global_configuration.merge(environment_configuration)
+      global_configuration.merge(stage_configuration)
     end
 
     def load
@@ -60,7 +60,7 @@ module Figs
       raise NotImplementedError
     end
 
-    def default_environment
+    def default_stage
       raise NotImplementedError
     end
 
@@ -76,8 +76,8 @@ module Figs
       raw_configuration
     end
 
-    def environment_configuration
-      raw_configuration.fetch(environment) { {} }
+    def stage_configuration
+      raw_configuration.fetch(stage) { {} }
     end
 
     def set(key, value)
