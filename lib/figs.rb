@@ -15,18 +15,12 @@ module Figs
     @backend ||= Figs::Application
   end
 
-  def application
-    @application ||= backend.new figfile
+  def application(options = {})
+    @application ||= backend.new({:file => figfile, :environment => options[:environment]})
   end
 
-  def load
-    application.load
-  end
-  
-  
-  
-  def figs
-    Figs::ENV
+  def load(options = {})
+    application({:environment => options[:environment]}).load
   end
   
   private
@@ -34,6 +28,4 @@ module Figs
   def figfile
     @figfile ||=YAML.load(ERB.new(File.read('Figfile')).result)
   end
-  
-  
 end

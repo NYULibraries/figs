@@ -5,17 +5,17 @@ module Figs
      @env ||= ::ENV
     end
     
-    def soup
-      @soup ||= Hash.new
+    def env_objects
+      @env_objects ||= Hash.new
     end
     
     def set(key,value)
       env[key.to_s] = value.to_s
-      soup[key] = value unless key.is_a?(String) && value.is_a?(String)
+      env_objects[key] = value unless key.is_a?(String) && value.is_a?(String)
     end
     
     def []key
-      return soup[key] if soup.key?(key)
+      return env_objects[key] if env_objects.key?(key)
       return env[key]
     end
     

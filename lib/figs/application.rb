@@ -13,15 +13,15 @@ module Figs
 
     attr_writer :environment
 
-    def initialize(file)
-      @figfile = file
+    def initialize(options = {})
+      @figfile = options[:file]
+      @environment = options[:environment]
       load_path
-      @environment = 'staging'#options[:environment]
     end
     
     def load_path
       if @figfile["method"].eql? "git"
-        @path = Figs::Git.location @figfile["location"]
+        @path = Figs::Git.location(@figfile["location"], @environment)
       else
         @path = @figfile["location"]
       end
@@ -41,6 +41,7 @@ module Figs
 
     def load
       each do |key, value|
+        
         set(key, value) unless skip?(key)
       end
       Figs::Git.delete_after_loading
@@ -73,7 +74,7 @@ module Figs
     end
 
     def global_configuration
-      raw_configuration.reject { |_, value| value.is_a?(Hash) }
+      raw_configuration
     end
 
     def environment_configuration
@@ -81,12 +82,9 @@ module Figs
     end
 
     def set(key, value)
-      non_string_configuration!(key) unless key.is_a?(String)
-      non_string_configuration!(value) unless value.is_a?(String)
-      
       # FigsFigs::ENV.set_array(key, value) unless !value.is_a?(Array)
-      Figs::ENV[key.to_s] = value.to_s
-      Figs::ENV[FIG_ENV_PREFIX + key.to_s] = value.to_s
+      Figs::ENV[key] = value
+      # Figs::ENV[FIG_ENV_PREFIX + key.to_s] = value.to_s
     end
 
     def skip?(key)
