@@ -15,5 +15,5 @@ Gem::Specification.new do |gem|
 
   # gem.files      = `git ls-files`.split($\)
   # gem.test_files = gem.files.grep(/^spec/)
-  gem.executables << "fig"
+  gem.executables << "figsify"
 end

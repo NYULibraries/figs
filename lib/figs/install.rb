@@ -20,5 +20,9 @@ module Figs
       Rake.application = self
       super
     end
+    
+    def default_task_name
+      "install"
+    end
   end
 end

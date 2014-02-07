@@ -41,7 +41,6 @@ module Figs
 
     def load
       each do |key, value|
-        
         set(key, value) unless skip?(key)
       end
       Figs::Git.delete_after_loading

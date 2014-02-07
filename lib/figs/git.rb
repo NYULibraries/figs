@@ -16,7 +16,7 @@ module Figs
     end
 
     def delete_after_loading
-      # FileUtils.rm_rf TMP_GIT_DIR
+      FileUtils.rm_rf TMP_GIT_DIR
     end
   end
 end
