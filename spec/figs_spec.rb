@@ -5,7 +5,7 @@ describe Figs do
     let(:figfile) { double(:figfile)}
     
     before do
-      Figs.stub(:figfile) { YAML.load("location: git@github.com:NYULibraries/xCite_settings.git\nmethod: git") }
+      Figs.stub(:figfile) { YAML.load("location: tmp/settings.yml\nmethod: path") }
     end
     
     it "falls through to Figs::ENV" do
@@ -38,7 +38,7 @@ describe Figs do
     before do
       Figs.stub(:backend) { backend }
       backend.stub(:new) { application }
-      Figs.stub(:figfile) { YAML.load("location: git@github.com:NYULibraries/xCite_settings.git\nmethod: git") }
+      Figs.stub(:figfile) { YAML.load("location: tmp/settings.yml\nmethod: path") }
     end
 
     it "defaults to a new backend application" do
