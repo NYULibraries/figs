@@ -38,13 +38,25 @@ module Figs
         return value
       elsif(matches_env_objects? meth)
         @env_objects.send meth, *args, &block
+      elsif(boolean_method? meth)
+        matches_env_key? meth.to_s.chop!
+      elsif(bang_method? meth)
+        send(meth.to_s.chop!)
       else
         super
       end
     end
     
     def respond_to? meth
-      matches_env?(meth) || matches_env_objects?(meth) || matches_env_key?(meth)
+      boolean_method?(meth) || bang_method?(meth) || matches_env?(meth) || matches_env_objects?(meth) || matches_env_key?(meth)
+    end
+    
+    def boolean_method? meth
+      meth.to_s.end_with? '?'
+    end
+    
+    def bang_method? meth
+      meth.to_s.end_with?('!') && matches_env_key?(meth.to_s.chop!)
     end
     
     def matches_env? meth
