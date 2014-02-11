@@ -31,19 +31,32 @@ module Figs
     
     def method_missing(meth, *args, &block)
       # Check to see if it can be evaluated
-      if(matches? meth)
+      if(matches_env? meth)
         env.send meth, *args, &block
+      elsif(matches_env_key? meth)
+        key, value = env.detect { |k, v| k.upcase.eql?(meth.to_s.upcase) }
+        return value
+      elsif(matches_env_objects? meth)
+        @env_objects.send meth, *args, &block
       else
         super
       end
     end
     
     def respond_to? meth
-      matches? meth
+      matches_env?(meth) || matches_env_objects?(meth) || matches_env_key?(meth)
     end
     
-    def matches? meth
-      env.respond_to? meth
+    def matches_env? meth
+      env.respond_to?(meth)
+    end
+    
+    def matches_env_key? meth
+      env.keys.any? {|key| key.upcase.eql?(meth.to_s.upcase) }
+    end
+    
+    def matches_env_objects? meth
+      @env_objects.respond_to? meth
     end
   end
 end
