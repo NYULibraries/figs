@@ -2,7 +2,7 @@
 [![Gem Version](https://badge.fury.io/rb/figs.png)](http://badge.fury.io/rb/figs)
 [![Build Status](https://travis-ci.org/NYULibraries/figs.png?branch=master)](https://travis-ci.org/NYULibraries/figs)
 [![Code Climate](https://codeclimate.com/github/NYULibraries/figs.png)](https://codeclimate.com/github/NYULibraries/figs)
-[![Coverage Status](https://coveralls.io/repos/NYULibraries/figs/badge.png?branch=master)](https://coveralls.io/r/NYULibraries/figs)
+[![Coverage Status](https://coveralls.io/repos/NYULibraries/figs/badge.png)](https://coveralls.io/r/NYULibraries/figs)
 [![Dependency Status](https://gemnasium.com/NYULibraries/figs.png)](https://gemnasium.com/NYULibraries/figs)
 
 Railsless, herokuless, configurable, barebones figaro with a knack of using git repos for configuration files.
