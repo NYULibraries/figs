@@ -1,20 +1,23 @@
 # encoding: utf-8
+$:.push File.expand_path("../lib", __FILE__)
+
+require "figs/version"
 
 Gem::Specification.new do |gem|
-  gem.name    = "figs"
-  gem.version = "0.7.0"
+  gem.name        = "figs"
+  gem.version     = "0.1.0"
+  gem.version     = Figs::VERSION
+  gem.platform    = Gem::Platform::RUBY
 
-  gem.author      = "Steve Richert"
-  gem.email       = "steve.richert@gmail.com"
-  gem.summary     = "Simple Rails app configuration"
-  gem.description = "Simple, Heroku-friendly Rails app configuration using ENV and a single YAML file"
-  gem.homepage    = "https://github.com/laserlemon/figaro"
+  gem.author      = "hab278"
+  gem.email       = "hab278@nyu.edu"
+  gem.summary     = "Simple app configuration"
+  gem.description = "Simple app configuration using ENV and YAML files"
+  gem.homepage    = "https://github.com/NYULibraries/figs"
   gem.license     = "MIT"
 
   gem.add_development_dependency "rake", "~> 10.1"
   gem.add_dependency "hashie", "~> 2.0.5"
   
-  # gem.files      = `git ls-files`.split($\)
-  # gem.test_files = gem.files.grep(/^spec/)
   gem.executables << "figsify"
 end
