@@ -39,7 +39,7 @@ module Figs
     
     def update_env_objects
       env_objects.keys.each do |key|
-        env_objects.delete(key) unless env.key?(key)
+        env_objects.delete(key) unless env.key?(key.to_s)
       end
     end
     
@@ -51,7 +51,7 @@ module Figs
       if env_objects.keys.any? {|k| k.upcase.eql?(key.to_s.upcase) }
         e = env_objects
       end
-      _, value = e.detect { |k, _| k.upcase == key.to_s.upcase }
+      _, value = e.detect { |k, _| k.upcase == key }
 
       case punctuation
       when "!" then value || missing_key!(key)
@@ -74,7 +74,7 @@ module Figs
       key, punctuation = extract_key_from_method(method)
 
       case punctuation
-      when "!" then env.keys.any? { |k| k.upcase == key.to_s.upcase } || super
+      when "!" then env.keys.any? { |k| k.upcase == key } || super
       when "?", nil then true
       else super
       end
