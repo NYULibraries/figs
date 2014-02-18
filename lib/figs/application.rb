@@ -81,7 +81,7 @@ module Figs
     end
 
     def global_configuration
-      raw_configuration
+      raw_configuration.reject { |key, value| key.to_s.eql?(stage) && value.is_a?(Hash) }
     end
 
     def stage_configuration
