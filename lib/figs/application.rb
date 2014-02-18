@@ -20,11 +20,15 @@ module Figs
     end
     
     def load_path
-      if @figfile["method"].eql? "git"
-        @path = Figs::Git.location(@figfile["location"], @stage)
+      if figfile["method"].eql? "git"
+        @path = Figs::Git.location(figfile["location"], @stage)
       else
-        @path = @figfile["location"]
+        @path = figfile["location"]
       end
+    end
+    
+    def figfile
+      (@figfile || default_figfile)
     end
 
     def path
@@ -61,6 +65,10 @@ module Figs
     end
 
     def default_stage
+      raise NotImplementedError
+    end
+    
+    def default_figfile
       raise NotImplementedError
     end
 

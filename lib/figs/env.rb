@@ -43,8 +43,8 @@ module Figs
       end
     end
     
-    def method_missing(method, *args)
-      if matches_env?(method) then env.send(method, args) end
+    def method_missing(method, *args, &block)
+      if matches_env?(method) then env.send(method, *args, &block) end
       
       key, punctuation = extract_key_from_method(method)
       e = env

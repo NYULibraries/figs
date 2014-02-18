@@ -1,61 +1,64 @@
-# require "spec_helper"
-# 
-# require "tempfile"
-# 
-# module Figs
-#   describe Application do
-#     before do
-#       Application.any_instance.stub(
-#         default_path: "/path/to/app/config/application.yml",
-#         default_environment: "development"
-#       )
-#     end
-# 
-#     describe "#path" do
-#       it "uses the default" do
-#         application = Application.new
-# 
-#         expect(application.path).to eq("/path/to/app/config/application.yml")
-#       end
-# 
-#       it "is configurable via initialization" do
-#         application = Application.new(path: "/app/env.yml")
-# 
-#         expect(application.path).to eq("/app/env.yml")
-#       end
-# 
-#       it "is configurable via setter" do
-#         application = Application.new
-#         application.path = "/app/env.yml"
-# 
-#         expect(application.path).to eq("/app/env.yml")
-#       end
-# 
-#       it "casts to string" do
-#         application = Application.new(path: Pathname.new("/app/env.yml"))
-# 
-#         expect(application.path).to eq("/app/env.yml")
-#         expect(application.environment).not_to be_a(Pathname)
-#       end
-# 
-#       it "follows a changing default" do
-#         application = Application.new
-# 
-#         expect {
-#           application.stub(default_path: "/app/env.yml")
-#         }.to change {
-#           application.path
-#         }.from("/path/to/app/config/application.yml").to("/app/env.yml")
-#       end
-#     end
-# 
-#     describe "#environment" do
-#       it "uses the default" do
-#         application = Application.new
-# 
-#         expect(application.environment).to eq("development")
-#       end
-# 
+require "spec_helper"
+
+require "tempfile"
+
+module Figs
+  describe Application do
+    
+    let(:figfile) { double(:figfile)}
+    before do
+      Application.any_instance.stub(
+        figfile: "",
+        default_path: "/path/to/app/config/application.yml",
+        default_environment: "development"
+      )
+    end
+
+    describe "#path" do
+      it "uses the default" do
+        application = Application.new
+
+        expect(application.path).to eq("/path/to/app/config/application.yml")
+      end
+
+      # it "is configurable via initialization" do
+      #   application = Application.new(path: "/app/env.yml")
+      # 
+      #   expect(application.path).to eq("/app/env.yml")
+      # end
+
+      # it "is configurable via setter" do
+      #   application = Application.new
+      #   application.path = "/app/env.yml"
+      # 
+      #   expect(application.path).to eq("/app/env.yml")
+      # end
+
+      # it "casts to string" do
+      #   application = Application.new(path: Pathname.new("/app/env.yml"))
+      # 
+      #   expect(application.path).to eq("/app/env.yml")
+      #   expect(application.environment).not_to be_a(Pathname)
+      # end
+
+      it "follows a changing default" do
+        application = Application.new
+
+        expect {
+          application.stub(default_path: "/app/env.yml")
+        }.to change {
+          application.path
+        }.from("/path/to/app/config/application.yml").to("/app/env.yml")
+      end
+    end
+
+    describe "#environment" do
+      # it "uses the default" do
+      #   application = Application.new
+      # 
+      #   expect(application.environment).to eq("development")
+      # end
+
 #       it "is configurable via initialization" do
 #         application = Application.new(environment: "test")
 # 
@@ -181,64 +184,64 @@
 #           application.configuration
 #         }.from("foo" => "bar").to("foo" => "baz")
 #       end
-#     end
-# 
-#     describe "#load" do
-#       let!(:application) { Application.new }
-# 
-#       before do
-#         ::ENV.delete("foo")
-#         ::ENV.delete("_FIG_foo")
-# 
-#         application.stub(configuration: { "foo" => "bar" })
-#       end
-# 
-#       it "merges values into ENV" do
-#         expect {
-#           application.load
-#         }.to change {
-#           ::ENV["foo"]
-#         }.from(nil).to("bar")
-#       end
-# 
-#       it "skips keys that have already been set externally" do
-#         ::ENV["foo"] = "baz"
-# 
-#         expect {
-#           application.load
-#         }.not_to change {
-#           ::ENV["foo"]
-#         }
-#       end
-# 
-#       it "sets keys that have already been set internally" do
-#         application.load
-# 
-#         application2 = Application.new
-#         application2.stub(configuration: { "foo" => "baz" })
-# 
-#         expect {
-#           application2.load
-#         }.to change {
-#           ::ENV["foo"]
-#         }.from("bar").to("baz")
-#       end
-# 
-#       it "warns when a key isn't a string" do
-#         application.stub(configuration: { foo: "bar" })
-# 
-#         expect(application).to receive(:warn).once
-# 
-#         application.load
-#       end
-# 
-#       it "warns when a value isn't a string" do
-#         application.stub(configuration: { "foo" => ["bar"] })
-# 
-#         expect(application).to receive(:warn).once
-# 
-#         application.load
-#       end
-#     end
-#   end
-# end
+    end
+
+    describe "#load" do
+      let!(:application) { Application.new }
+
+      before do
+        ::ENV.delete("foo")
+        ::ENV.delete("_FIG_foo")
+
+        application.stub(configuration: { "foo" => "bar" })
+      end
+
+      # it "merges values into ENV" do
+      #   expect {
+      #     application.load
+      #   }.to change {
+      #     ::ENV["foo"]
+      #   }.from(nil).to("bar")
+      # end
+
+      # it "skips keys that have already been set externally" do
+      #   ::ENV["foo"] = "baz"
+      # 
+      #   expect {
+      #     application.load
+      #   }.not_to change {
+      #     ::ENV["foo"]
+      #   }
+      # end
+
+      it "sets keys that have already been set internally" do
+        application.load
+
+        application2 = Application.new
+        application2.stub(configuration: { "foo" => "baz" })
+
+        expect {
+          application2.load
+        }.to change {
+          ::ENV["foo"]
+        }.from("bar").to("baz")
+      end
+
+      it "DOES NOT warn when a key isn't a string" do
+        application.stub(configuration: { foo: "bar" })
+
+        expect(application).to_not receive(:warn)
+
+        application.load
+      end
+
+      it "DOES NOT warn when a value isn't a string" do
+        application.stub(configuration: { "foo" => ["bar"] })
+
+        expect(application).to_not receive(:warn)
+
+        application.load
+      end
+    end
+  end
+end
