@@ -44,14 +44,14 @@ module Figs
     end
     
     def method_missing(method, *args, &block)
-      if matches_env?(method) then env.send(method, *args, &block) end
+      if matches_env?(method) then return env.send(method, *args, &block) end
       
       key, punctuation = extract_key_from_method(method)
       e = env
       if env_objects.keys.any? {|k| k.upcase.eql?(key.to_s.upcase) }
         e = env_objects
       end
-      _, value = e.detect { |k, _| k.upcase == key }
+      _, value = e.detect { |k, _| k.upcase == key.to_s.upcase }
 
       case punctuation
       when "!" then value || missing_key!(key)
@@ -74,7 +74,7 @@ module Figs
       key, punctuation = extract_key_from_method(method)
 
       case punctuation
-      when "!" then env.keys.any? { |k| k.upcase == key } || super
+      when "!" then env.keys.any? { |k| k.upcase == key.to_s.upcase } || super
       when "?", nil then true
       else super
       end

@@ -11,7 +11,7 @@ module Figs
 
     include Enumerable
 
-    attr_writer :stage
+    attr_writer :stage, :path
 
     def initialize(options = {})
       @figfile = options[:file]
@@ -91,11 +91,11 @@ module Figs
     def set(key, value)
       # FigsFigs::ENV.set_array(key, value) unless !value.is_a?(Array)
       Figs::ENV[key] = value
-      # Figs::ENV[FIG_ENV_PREFIX + key.to_s] = value.to_s
+      Figs::ENV[FIG_ENV_PREFIX + key.to_s] = value
     end
 
     def skip?(key)
-      Figs::ENV.key?(key.to_s) && Figs::ENV.key?(FIG_ENV_PREFIX + key.to_s)
+      Figs::ENV.key?(key.to_s) && !Figs::ENV.key?(FIG_ENV_PREFIX + key.to_s)
     end
 
     def non_string_configuration!(value)
