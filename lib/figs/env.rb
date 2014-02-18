@@ -43,51 +43,45 @@ module Figs
       end
     end
     
-    def method_missing(meth, *args, &block)
-      # Check to see if it can be evaluated
-      if(matches_key? meth)
-        key, value = env.detect { |k, v| k.upcase.eql?(meth.to_s.upcase) }
-        return self[key]
-      elsif(boolean_method? meth)
-        matches_key?(meth.to_s.chop!)
-      elsif(bang_method? meth)
-        send(meth.to_s.chop!)
-      elsif(setter_method?(meth))
-        set(meth.to_s.chop!, args.first)
-      else
-        super
+    def method_missing(method, *args)
+      if matches_env?(method) then env.send(method, args) end
+      
+      key, punctuation = extract_key_from_method(method)
+      e = env
+      if env_objects.keys.any? {|k| k.upcase.eql?(key.to_s.upcase) }
+        e = env_objects
+      end
+      _, value = e.detect { |k, _| k.upcase == key }
+
+      case punctuation
+      when "!" then value || missing_key!(key)
+      when "?" then !!value
+      when nil then value
+      else super
       end
     end
+
+    def extract_key_from_method(method)
+      method.to_s.upcase.match(/^(.+?)([!?=])?$/).captures
+    end
+
+    def missing_key!(key)
+      raise MissingKey.new("Missing required Figaro configuration key #{key.inspect}.")
+    end
     
-    def respond_to? meth
-      if bang_method?(meth)
-        return matches_key?(meth.to_s.chop!)
+    def respond_to?(method, *)
+      return true if matches_env?(method)
+      key, punctuation = extract_key_from_method(method)
+
+      case punctuation
+      when "!" then env.keys.any? { |k| k.upcase == key } || super
+      when "?", nil then true
+      else super
       end
-      setter_method?(meth) || boolean_method?(meth) || matches_env?(meth)  || matches_key?(meth) || super
-    end
-    
-    def boolean_method? meth
-      meth.to_s.end_with? '?'
-    end
-    
-    def bang_method? meth
-      meth.to_s.end_with?('!')
-    end
-    
-    def setter_method? meth
-      meth.to_s.end_with?('=')
     end
     
     def matches_env? meth
       env.respond_to?(meth)
-    end
-    
-    def matches_env_objects? meth
-      @env_objects.respond_to?(meth)
-    end
-    
-    def matches_key? meth
-      env.keys.any? {|key| key.upcase.eql?(meth.to_s.upcase) }
     end
   end
 end
