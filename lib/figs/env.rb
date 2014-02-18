@@ -28,6 +28,7 @@ module Figs
     end
     
     def []key
+      update_env_objects
       return env_objects[key] if env_objects.key?(key)
       return env[key]
     end
@@ -36,10 +37,11 @@ module Figs
       set(key, value)
     end
     
-    def update
-      env_objects.keys.each {|key| env.key?(key)
+    def update_env_objects
+      env_objects.keys.each do |key|
+        env_objects.delete(key) unless env.key?(key)
+      end
     end
-    
     
     def method_missing(meth, *args, &block)
       # Check to see if it can be evaluated
