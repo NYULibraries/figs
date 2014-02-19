@@ -32,7 +32,7 @@ module Figs
     end
 
     def path
-      (@path || default_path).to_s
+      (@path || default_path)
     end
 
     def stage
@@ -76,8 +76,14 @@ module Figs
       (@parsed ||= Hash.new { |hash, path| hash[path] = parse(path) })[path]
     end
 
-    def parse(path)
+    def parse_path(path)
       File.exist?(path) && YAML.load(ERB.new(File.read(path)).result) || {}
+    end
+    
+    def parse(paths)
+      parse = {}
+      paths.is_a?(Array) ? paths.each { |path| parse.merge!(parse_path(path)) } : parse.merge!(parse_path(paths))
+      parse
     end
 
     def global_configuration
