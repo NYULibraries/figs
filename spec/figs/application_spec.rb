@@ -47,6 +47,11 @@ module Figs
           application.path
         }.from("/path/to/app/config/application.yml").to("/app/env.yml")
       end
+      
+      it "allows multiple files" do
+        application = Application.new(file: YAML.load("location:\n- /app/env1.yml\n- /app/env2.yml\nmethod: path"))
+        expect(application.path).to eq(["/app/env1.yml","/app/env2.yml"])
+      end
     end
 
     describe "#stage" do
@@ -184,6 +189,13 @@ YAML
         }.to change {
           application.configuration
         }.from("foo" => "bar").to("foo" => "baz")
+      end
+      
+      it "picks up yaml from multiple files" do
+        # puts from_figfile("\n- #{yaml_to_path("fooz: barz")}\n- #{yaml_to_path("foos: bars")}")
+        application = Application.new(file: from_figfile("\n- #{yaml_to_path("fooz: barz")}\n- #{yaml_to_path("foos: bars")}"))
+        
+        expect(application.configuration).to eq("fooz" => "barz", "foos" => "bars") 
       end
     end
 
