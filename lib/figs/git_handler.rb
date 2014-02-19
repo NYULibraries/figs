@@ -4,12 +4,14 @@ module Figs
   module GitHandler
     extend self
     TMP_GIT_DIR = "tmp/figs/"
-    
+
     def location gitpath, filenames
-      git_clone gitpath
-      tmp_filenames(([]<<filenames).flatten)
-    rescue
-      clear_tmp_dir
+      begin
+        git_clone gitpath
+        tmp_filenames(([]<<filenames).flatten)
+      rescue
+        clear_tmp_dir
+      end
     end
     
     private
