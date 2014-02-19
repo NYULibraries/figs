@@ -6,12 +6,10 @@ module Figs
     TMP_GIT_DIR = "tmp/figs/"
 
     def location gitpath, filenames
-      begin
-        git_clone gitpath
-        tmp_filenames(([]<<filenames).flatten)
-      rescue
-        clear_tmp_dir
-      end
+      git_clone gitpath
+      tmp_filenames(([]<<filenames).flatten)
+    rescue
+      clear_tmp_dir
     end
     
     private
