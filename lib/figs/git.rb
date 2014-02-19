@@ -1,21 +1,39 @@
 require "git"
 
 module Figs
-  module Git
+  module GitHandler
     extend self
     TMP_GIT_DIR = "tmp/figs/"
-    def location path, filename
-      clone_dir path, filename
-      "#{TMP_GIT_DIR}#{filename}.yml"
+    
+    def location gitpath, filenames
+      git_clone gitpath
+      tmp_filenames(([]<<filenames).flatten)
+    rescue
+      clear_tmp_dir
     end
     
-    def clone_dir path, filename
-      if !File.exists?("#{TMP_GIT_DIR}#{filename}.yml")
-        ::Git.clone path, TMP_GIT_DIR
+    private
+    
+    def tmp_filenames filenames
+      tmp_files = []
+      filenames.each { |filename| tmp_files << copy_to_tmp_files(filename) }
+      clear_tmp_dir
+      tmp_files
+    end
+    
+    def copy_to_tmp_files filename
+      Tempfile.open("#{filename}") do |file|
+        file.write(File.open("#{TMP_GIT_DIR}#{filename}").read)
+        file.path
       end
     end
-
-    def delete_after_loading
+    
+    def git_clone gitpath
+      clear_tmp_dir
+      ::Git.clone gitpath, TMP_GIT_DIR
+    end
+    
+    def clear_tmp_dir
       FileUtils.rm_rf TMP_GIT_DIR
     end
   end

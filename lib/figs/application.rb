@@ -21,9 +21,17 @@ module Figs
     
     def load_path
       if figfile["method"].eql? "git"
-        @path = Figs::Git.location(figfile["location"], @stage)
+        @path = path_from_git figfile["location"]
       else
         @path = figfile["location"]
+      end
+    end
+    
+    def path_from_git locations
+      if(locations.is_a?(Array))
+        Figs::GitHandler.location(locations.first, locations.last(locations.size-1))
+      else
+        Figs::GitHandler.location(location, @stage)
       end
     end
     
@@ -47,7 +55,6 @@ module Figs
       each do |key, value|
         set(key, value) unless skip?(key)
       end
-      Figs::Git.delete_after_loading
     end
     
     def env
