@@ -50,7 +50,16 @@ module Figs
       
       it "allows multiple files" do
         application = Application.new(file: YAML.load("location:\n- /app/env1.yml\n- /app/env2.yml\nmethod: path"))
+        
         expect(application.path).to eq(["/app/env1.yml","/app/env2.yml"])
+      end
+      
+      describe "git" do
+        it "allows for a git repo" do
+          application = Application.new(file: YAML.load("location:\n- git@github.com:NYULibraries/xCite_settings.git\n- testing.yml\nmethod: git"))
+
+          expect(application.path).to_not eq(:default_path)
+        end
       end
     end
 
@@ -192,7 +201,6 @@ YAML
       end
       
       it "picks up yaml from multiple files" do
-        # puts from_figfile("\n- #{yaml_to_path("fooz: barz")}\n- #{yaml_to_path("foos: bars")}")
         application = Application.new(file: from_figfile("\n- #{yaml_to_path("fooz: barz")}\n- #{yaml_to_path("foos: bars")}"))
         
         expect(application.configuration).to eq("fooz" => "barz", "foos" => "bars") 
