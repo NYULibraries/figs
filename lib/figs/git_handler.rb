@@ -7,7 +7,7 @@ module Figs
 
     def location gitpath, filenames
       git_clone gitpath
-      tmp_filenames(([]<<filenames).flatten)
+      tmp_filenames(([]<< filenames).flatten)
     rescue
       clear_tmp_dir
     end
