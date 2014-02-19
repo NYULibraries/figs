@@ -3,7 +3,7 @@ require "yaml"
 
 require "figs/error"
 require "figs/env"
-require "figs/git"
+require "figs/git_handler"
 
 module Figs
   class Application

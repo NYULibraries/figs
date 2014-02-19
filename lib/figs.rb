@@ -1,6 +1,5 @@
 require "figs/application"
 require "figs/env"
-require "git"
 
 module Figs
   extend self
