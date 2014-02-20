@@ -56,7 +56,7 @@ module Figs
       
       describe "git" do
         it "allows for a git repo" do
-          application = Application.new(file: YAML.load("location:\n- git@github.com:hab278/test-figs.git\n- testing.yml\n- test.yml\nmethod: git"))
+          application = Application.new(file: YAML.load("location:\n- https://github.com/hab278/test-figs.git\n- testing.yml\n- test.yml\nmethod: git"))
 
           expect(application.path).to_not eq(:default_path)
         end
@@ -220,7 +220,7 @@ YAML
       
       describe "git" do
         it "picks up yaml from git repo" do
-          application = Application.new(file: YAML.load("location:\n- git@github.com:hab278/test-figs.git\n- testing.yml\n- test.yml\nmethod: git"))
+          application = Application.new(file: YAML.load("location:\n- https://github.com/hab278/test-figs.git\n- testing.yml\n- test.yml\nmethod: git"))
 
           expect(application.configuration).to eq("fooz" => "barz", "foo" => "bar")
         end
