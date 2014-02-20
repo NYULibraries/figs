@@ -3,7 +3,10 @@
 require "figs/install"
 
 if ARGV.length > 1
-  abort "Too many arguments; please specify only the yaml file location/git repo."
+  # abort "Too many arguments; please specify only the yaml file location/git repo."
+  join = ARGV.join(",")
+  ARGV.clear
+  ARGV.push join
 end
 
 ARGV.push "install[#{ARGV.pop}]"
