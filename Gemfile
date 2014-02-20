@@ -8,4 +8,3 @@ group :test do
   gem "rspec", "~> 2.14"
 end
 gem 'git'
-gem 'debugger'

@@ -5,7 +5,6 @@ require "figs/version"
 
 Gem::Specification.new do |gem|
   gem.name        = "figs"
-  gem.version     = "0.1.0"
   gem.version     = Figs::VERSION
   gem.platform    = Gem::Platform::RUBY
 
@@ -18,6 +17,7 @@ Gem::Specification.new do |gem|
 
   gem.add_development_dependency "rake", "~> 10.1"
   gem.add_dependency "hashie", "~> 2.0.5"
+  gem.add_dependency "git", "~> 1.2.6"
   
   gem.executables << "figsify"
 end
