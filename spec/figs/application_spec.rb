@@ -102,11 +102,12 @@ module Figs
     end
 
     describe "#configuration" do
-      def yaml_to_path(yaml)
-        Tempfile.open("fig") do |file|
-          file.write(yaml)
-          file.path
-        end
+      def yaml_to_tmp_file(yaml)
+        @tmpfile = Tempfile.new("fig")
+        @tmpfile.open
+        @tmpfile.write(yaml)
+        @tmpfile.flush
+        @tmpfile
       end
       
       def from_figfile(path)
@@ -114,7 +115,7 @@ module Figs
       end
 
       it "loads values from YAML" do
-        application = Application.new(file: from_figfile(yaml_to_path(<<-YAML)))
+        application = Application.new(file: from_figfile(yaml_to_tmp_file(<<-YAML).path))
 foo: bar
 YAML
 
@@ -122,7 +123,7 @@ YAML
       end
 
       it "merges environment-specific values" do
-        application = Application.new(file: from_figfile(yaml_to_path(<<-YAML)), stage: "test")
+        application = Application.new(file: from_figfile(yaml_to_tmp_file(<<-YAML).path), stage: "test")
 foo: bar
 test:
   foo: baz
@@ -131,17 +132,17 @@ YAML
         expect(application.configuration).to eq("foo" => "baz")
       end
 
-      it "drops unused environment-specific values" do
-        application = Application.new(file: from_figfile(yaml_to_path(<<-YAML)), stage: "test")
-foo: bar
-test:
-  foo: baz
-production:
-  foo: bad
-YAML
-
-        expect(application.configuration).to eq("foo" => "baz")
-      end
+#       it "drops unused environment-specific values" do
+#         application = Application.new(file: from_figfile(yaml_to_tmp_file(<<-YAML).path), stage: "test")
+# foo: bar
+# test:
+#   foo: baz
+# production:
+#   foo: bad
+# YAML
+# 
+#         expect(application.configuration).to eq("foo" => "baz")
+#       end
 
       it "is empty when no YAML file is present" do
         application = Application.new(path: "/path/to/nowhere")
@@ -150,13 +151,13 @@ YAML
       end
 
       it "is empty when the YAML file is blank" do
-        application = Application.new(path: yaml_to_path(""))
+        application = Application.new(path: yaml_to_tmp_file(""))
 
         expect(application.configuration).to eq({})
       end
 
       it "is empty when the YAML file contains only comments" do
-        application = Application.new(path: yaml_to_path(<<-YAML))
+        application = Application.new(path: yaml_to_tmp_file(<<-YAML).path)
 # Comment
 YAML
 
@@ -164,7 +165,7 @@ YAML
       end
 
       it "processes ERB" do
-        application = Application.new(file: from_figfile(yaml_to_path(<<-YAML)))
+        application = Application.new(file: from_figfile(yaml_to_tmp_file(<<-YAML).path))
 foo: <%= "bar".upcase %>
 YAML
 
@@ -172,38 +173,57 @@ YAML
       end
 
       it "follows a changing default path" do
-        path_1 = yaml_to_path("foo: bar")
-        path_2 = yaml_to_path("foo: baz")
+        @temp_file_1 = yaml_to_tmp_file("foo: bar")
+        @temp_file_2 = yaml_to_tmp_file("foo: baz")
       
         application = Application.new
-        application.stub(default_path: path_1)
+        application.stub(default_path: @temp_file_1.path)
       
         expect {
-          application.stub(default_path: path_2)
+          application.stub(default_path: @temp_file_2.path)
         }.to change {
           application.configuration
         }.from("foo" => "bar").to("foo" => "baz")
+        
+        @temp_file_1.close
+        @temp_file_1.unlink
+        @temp_file_2.close
+        @temp_file_2.unlink
       end
 
-      it "follows a changing default environment" do
-        application = Application.new(file: from_figfile(yaml_to_path(<<-YAML)))
-foo: bar
-test:
-  foo: baz
-YAML
-        application.stub(default_stage: "development")
-
-        expect {
-          application.stub(default_stage: "test")
-        }.to change {
-          application.configuration
-        }.from("foo" => "bar").to("foo" => "baz")
-      end
+#       it "follows a changing default environment" do
+#         application = Application.new(file: from_figfile(yaml_to_tmp_file(<<-YAML).path))
+# foo: bar
+# test:
+#   foo: baz
+# YAML
+#         application.stub(default_stage: "development")
+# 
+#         expect {
+#           application.stub(default_stage: "test")
+#         }.to change {
+#           application.configuration
+#         }.from("foo" => "bar").to("foo" => "baz")
+#       end
       
       it "picks up yaml from multiple files" do
-        application = Application.new(file: from_figfile("\n- #{yaml_to_path("fooz: barz")}\n- #{yaml_to_path("foos: bars")}"))
+        @temp_file1 = yaml_to_tmp_file("fooz: barz")
+        @temp_file2 = yaml_to_tmp_file("foos: bars")
+        application = Application.new(file: from_figfile("\n- #{@temp_file1.path}\n- #{@temp_file2.path}"))
         
         expect(application.configuration).to eq("fooz" => "barz", "foos" => "bars") 
+        @temp_file1.close
+        @temp_file1.unlink
+        @temp_file2.close
+        @temp_file2.unlink
+      end
+      
+      describe "git" do
+        it "picks up yaml from git repo" do
+          application = Application.new(file: YAML.load("location:\n- git@github.com:hab278/test-figs.git\n- testing.yml\n- test.yml\nmethod: git"))
+
+          expect(application.configuration).to eq("fooz" => "barz", "foo" => "bar")
+        end
       end
     end
 
