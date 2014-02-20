@@ -55,6 +55,8 @@ module Figs
       each do |key, value|
         set(key, value) unless skip?(key)
       end
+    ensure
+      Figs::GitHandler.clear_temp_files
     end
     
     def env
