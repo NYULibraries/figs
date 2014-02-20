@@ -45,6 +45,8 @@ figsify git@github.com:GITHUBNAME/REPONAME.git filename1.yml config/filename2.ym
 
 Now Figs will know where to find your environment vars!
 
+__IMPORTANT:__ The order in which you load your files matters, as the environment variables perform a merge on the hashes, the right hand arguments taking precedence.
+
 Then in ruby
 
 ```ruby
