@@ -35,12 +35,12 @@ figsify
 or
 
 ```
-figsify config/settings.yml
+figsify config/settings1.yml config/settings2.yml config/settings3.yml
 ```
 And finally 
 
 ```
-figsify git@github.com:GITHUBNAME/REPONAME.git
+figsify git@github.com:GITHUBNAME/REPONAME.git filename1.yml config/filename2.yml
 ```
 
 Now Figs will know where to find your environment vars!
