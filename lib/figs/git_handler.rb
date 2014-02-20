@@ -6,26 +6,35 @@ module Figs
     TMP_GIT_DIR = "tmp/figs/"
 
     def location gitpath, filenames
+      @temp_files = []
       git_clone gitpath
-      tmp_filenames(([]<< filenames).flatten)
+      temp_filenames(([]<< filenames).flatten)
     rescue
       clear_tmp_dir
+      clear_temp_files
+    end
+    
+    def clear_temp_files
+      return unless !@temp_files.nil?
+      @temp_files.each { |temp_file| temp_file.close temp_file.unlink }
     end
     
     private
     
-    def tmp_filenames filenames
-      tmp_files = []
-      filenames.each { |filename| tmp_files << copy_to_tmp_files(filename) }
+    def temp_filenames filenames
+      temp_files = []
+      filenames.each { |filename| temp_files << copy_to_temp_files(filename) }
       clear_tmp_dir
-      tmp_files
+      temp_files
     end
     
-    def copy_to_tmp_files filename
-      Tempfile.open("#{filename}") do |file|
-        file.write(File.open("#{TMP_GIT_DIR}#{filename}").read)
-        file.path
-      end
+    def copy_to_temp_files filename
+      temp_file = Tempfile.new("#{filename}")
+      temp_file.open
+      temp_file.write(File.open("#{TMP_GIT_DIR}#{filename}").read)
+      temp_file.flush
+      @temp_files << temp_file
+      temp_file.path
     end
     
     def git_clone gitpath
