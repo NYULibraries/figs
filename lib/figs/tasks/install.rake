@@ -1,34 +1,34 @@
 require 'erb'
 require 'pathname'
+require 'figs/figfile'
 desc 'Install Fig'
 task :install do |task, args|
   base_dir = Pathname.new('.')
+  locations = args.extras.empty? ? "application.yml" :  args.extras
+  figfile = Figs::Figfile.new(*locations)
+  
+  create_figfile base_dir, figfile
+  create_non_existent_yaml(figfile.locations) if figfile.method.eql?("path")
+  
+  puts "[Done] Enjoy your figs sir!"
+end
+
+def create_figfile base_dir, figfile
   puts "Figsifying #{base_dir}/ ..."
-  locations = args.extras || "application.yml"
-  method = locations.first.downcase.end_with?(".git") ? "git" : "path"
-  
-  puts "Figs yaml located at #{locations.join(", ")} using #{method} method."
-  
   file = base_dir.join('Figfile')
   File.open(file, 'w+') do |f|
-    f.write("location: ")
-    locations.each { |location| f.write("\n - #{location}")}
-    f.write("\nmethod: #{method}")
+    f.write(figfile.to_yaml)
   end
-  
-  if method.eql?("path")
-    locations.each do |location|
-      if !File.exists?(location)
-        puts "[Add] #{location} does not exist, creating."
-        application_yml = File.expand_path("../../templates/application.yml", __FILE__)
-        template = File.read(application_yml)
-        file = location
-        File.open(file, 'w+') do |f|
-          f.write(ERB.new(template).result(binding))
-        end
+end
+
+def create_non_existent_yaml locations
+  locations.each do |file|
+    if !File.exists?(file)
+      puts "[Add] #{file} does not exist, creating."
+      application_yml = File.expand_path("../../templates/application.yml", __FILE__)
+      File.open(file, 'w+') do |f|
+        f.write(ERB.new(File.read(application_yml)).result(binding))
       end
     end
   end
-  
-  puts "[Done] Enjoy your figs sir!"
 end
