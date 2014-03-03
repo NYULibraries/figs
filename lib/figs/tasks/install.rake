@@ -13,7 +13,7 @@ task :install do |task, args|
   puts "[Done] Enjoy your figs sir!"
 end
 
-def create_figfile base_dir, figfile
+def create_figfile(base_dir, figfile)
   puts "Figsifying #{base_dir}/ ..."
   file = base_dir.join('Figfile')
   File.open(file, 'w+') do |f|
@@ -21,7 +21,7 @@ def create_figfile base_dir, figfile
   end
 end
 
-def create_non_existent_yaml locations
+def create_non_existent_yaml(locations)
   locations.each do |file|
     if !File.exists?(file)
       puts "[Add] #{file} does not exist, creating."

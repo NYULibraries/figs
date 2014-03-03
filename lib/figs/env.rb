@@ -27,7 +27,7 @@ module Figs
       end
     end
     
-    def []key
+    def [](key)
       update_env_objects
       return env_objects[key] if env_objects.key?(key)
       return env[key]
@@ -80,8 +80,8 @@ module Figs
       end
     end
     
-    def matches_env? meth
-      env.respond_to?(meth)
+    def matches_env?(method)
+      env.respond_to?(method)
     end
   end
 end

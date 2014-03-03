@@ -27,7 +27,7 @@ module Figs
       end
     end
     
-    def path_from_git locations
+    def path_from_git(locations)
       if(locations.is_a?(Array))
         Figs::GitHandler.location(locations.first, locations.last(locations.size-1))
       else
