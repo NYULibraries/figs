@@ -232,7 +232,7 @@ YAML
     
       before do
         ::ENV.delete("foo")
-        ::ENV.delete("_FIG_foo")
+        ::ENV.delete("_FIGS_foo")
     
         application.stub(configuration: { "foo" => "bar" })
       end

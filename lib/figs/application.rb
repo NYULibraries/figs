@@ -7,7 +7,7 @@ require "figs/git_handler"
 
 module Figs
   class Application
-    FIG_ENV_PREFIX = "_FIGS_"
+    FIGS_ENV_PREFIX = "_FIGS_"
 
     include Enumerable
 
@@ -19,19 +19,23 @@ module Figs
       load_path
     end
     
+    def locations
+      figfile["location"]
+    end
+    
     def load_path
       if figfile["method"].eql? "git"
-        @path = path_from_git figfile["location"]
+        @path = path_from_git(locations.first, locations.last(locations.size-1))
       else
         @path = figfile["location"]
       end
     end
     
-    def path_from_git(locations)
+    def path_from_git(git_path, filenames = nil)
       if(locations.is_a?(Array))
-        Figs::GitHandler.location(locations.first, locations.last(locations.size-1))
+        Figs::GitHandler.location(git_path, filenames)
       else
-        Figs::GitHandler.location(location, @stage)
+        Figs::GitHandler.location(git_path, @stage)
       end
     end
     
@@ -106,11 +110,11 @@ module Figs
     def set(key, value)
       # FigsFigs::ENV.set_array(key, value) unless !value.is_a?(Array)
       Figs::ENV[key] = value
-      Figs::ENV[FIG_ENV_PREFIX + key.to_s] = value
+      Figs::ENV[FIGS_ENV_PREFIX + key.to_s] = value
     end
 
     def skip?(key)
-      Figs::ENV.key?(key.to_s) && !Figs::ENV.key?(FIG_ENV_PREFIX + key.to_s)
+      Figs::ENV.key?(key.to_s) && !Figs::ENV.key?(FIGS_ENV_PREFIX + key.to_s)
     end
 
     def non_string_configuration!(value)
