@@ -7,7 +7,7 @@ require "figs/git_handler"
 
 module Figs
   class Application
-    FIG_ENV_PREFIX = "_FIG_"
+    FIG_ENV_PREFIX = "_FIGS_"
 
     include Enumerable
 
