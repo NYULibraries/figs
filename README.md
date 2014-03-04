@@ -17,7 +17,7 @@ However, much like Figaro, Figs allows you to Open Source your app while keeping
 
 ## How does it work?
 
-Figs is identical to Figaro in every way barring a few key differences. It uses `ENV` to store any string key-value pairs. However, sometimes its necessary to store more complex objects, such as arrays. `ENV` doesn't allow for objects, so we provide a souped-up wrapper called `Figs::Env` for this purpose! All key-value pairs are converted to strings and stored in `ENV`, but non-converted pairs can be accessed anytime using  the Figs.env method.
+Figs is identical to Figaro in every way barring a few key differences. It uses `ENV` to store any string key-value pairs. However, sometimes its necessary to store more complex objects, such as arrays. `ENV` doesn't allow for objects, so we provide a souped-up wrapper called `Figs::Env` for this purpose! All keys are converted to strings and all non-string values are marshalled and stored in `ENV`, you can demarshall them yourself using `ENV` or rely on `Figs::Env.key_name` to do it fast and easy!
 
 ## Example.
 
