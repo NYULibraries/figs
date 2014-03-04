@@ -78,7 +78,7 @@ module Figs
     end
 
     def default_stage
-      raise NotImplementedError
+      "test"
     end
     
     def default_figfile
