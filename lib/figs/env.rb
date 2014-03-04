@@ -3,55 +3,33 @@ module Figs
   module ENV
     extend self
     
-    class EnvObjects < Hash
-      include Hashie::Extensions::MethodAccess
-    end
-    
     def env
      @env ||= ::ENV
     end
     
-    def env_objects
-      @env_objects ||= EnvObjects.new
-    end
-    
     def set(key,value)
-      env[key.to_s] = value.to_s
-      env_objects[key] = value unless key.is_a?(String) && value.is_a?(String)
-    end
-    
-    def delete(key)
-      env.delete(key) {nil}
-      if env_objects.key?(key)
-        env_objects.delete(key) {nil}
-      end
+      env[key.to_s] = value.is_a?(String) ? value : YAML::dump(value)
     end
     
     def [](key)
-      update_env_objects
-      return env_objects[key] if env_objects.key?(key)
-      return env[key]
+      return demarshall(env[key.to_s])
     end
     
     def []=(key,value)
       set(key, value)
     end
     
-    def update_env_objects
-      env_objects.keys.each do |key|
-        env_objects.delete(key) unless env.key?(key.to_s)
-      end
+    def demarshall(value)
+      value.nil? ? nil : YAML::load(value)
     end
     
     def method_missing(method, *args, &block)
       if matches_env?(method) then return env.send(method, *args, &block) end
       
       key, punctuation = extract_key_from_method(method)
-      e = env
-      if env_objects.keys.any? {|k| k.upcase.eql?(key.to_s.upcase) }
-        e = env_objects
-      end
-      _, value = e.detect { |k, _| k.upcase == key }
+      _, value = env.detect { |k, _| k.upcase == key }
+      
+      value = demarshall(value)
 
       case punctuation
       when "!" then value || missing_key!(key)
