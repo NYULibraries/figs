@@ -19,7 +19,7 @@ module Figs
       end
     
       it "is configurable via initialization" do
-        application = Application.new(file: YAML.load("location: /app/env.yml\nmethod: path"))
+        application = Application.new(file: YAML.load("locations: /app/env.yml\nmethod: path"))
       
         expect(application.path).to eq("/app/env.yml")
       end
@@ -32,7 +32,7 @@ module Figs
       end
     
       it "casts to string" do
-        application = Application.new(file: YAML.load("location: /app/env.yml\nmethod: path"))
+        application = Application.new(file: YAML.load("locations: /app/env.yml\nmethod: path"))
       
         expect(application.path).to eq("/app/env.yml")
         expect(application.stage).not_to be_a(Pathname)
@@ -49,14 +49,14 @@ module Figs
       end
       
       it "allows multiple files" do
-        application = Application.new(file: YAML.load("location:\n- /app/env1.yml\n- /app/env2.yml\nmethod: path"))
+        application = Application.new(file: YAML.load("locations:\n- /app/env1.yml\n- /app/env2.yml\nmethod: path"))
         
         expect(application.path).to eq(["/app/env1.yml","/app/env2.yml"])
       end
       
       describe "git" do
         it "allows for a git repo" do
-          application = Application.new(file: YAML.load("location:\n- https://github.com/hab278/test-figs.git\n- testing.yml\n- test.yml\nmethod: git"))
+          application = Application.new(file: YAML.load("repo: https://github.com/hab278/test-figs.git\nlocations:\n- testing.yml\n- test.yml\nmethod: git"))
 
           expect(application.path).to_not eq(:default_path)
         end
@@ -111,7 +111,7 @@ module Figs
       end
       
       def from_figfile(path)
-        YAML.load("location: #{path}\nmethod: path")
+        YAML.load("locations: #{path}\nmethod: path")
       end
 
       it "loads values from YAML" do
@@ -220,7 +220,7 @@ YAML
       
       describe "git" do
         it "picks up yaml from git repo" do
-          application = Application.new(file: YAML.load("location:\n- https://github.com/hab278/test-figs.git\n- testing.yml\n- test.yml\nmethod: git"))
+          application = Application.new(file: YAML.load("repo: https://github.com/hab278/test-figs.git\nlocations:\n- testing.yml\n- test.yml\nmethod: git"))
 
           expect(application.configuration).to eq("fooz" => "barz", "foo" => "bar")
         end

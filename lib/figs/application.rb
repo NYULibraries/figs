@@ -20,14 +20,14 @@ module Figs
     end
     
     def locations
-      figfile["location"]
+      figfile["locations"]
     end
     
     def load_path
       if figfile["method"].eql? "git"
-        @path = path_from_git(locations.first, locations.last(locations.size-1))
+        @path = path_from_git(figfile["repo"], figfile["locations"])
       else
-        @path = figfile["location"]
+        @path = figfile["locations"]
       end
     end
     
