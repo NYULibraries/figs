@@ -69,4 +69,15 @@ method: git
 YAML
     end
   end
+  
+  describe "#[]" do
+    context 'when it is a path location' do
+      subject { path_figfile["method"] }
+      it { should eq("path") }
+    end
+    context 'when it is a git location' do
+      subject { git_figfile["method"] }
+      it { should eq("git") }
+    end
+  end
 end

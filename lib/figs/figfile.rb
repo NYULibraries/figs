@@ -6,5 +6,9 @@ module Figs
       @locations = args
       @method = @repo.nil? ? "path" : "git"
     end
+    
+    def [](key)
+      send key
+    end
   end
 end
