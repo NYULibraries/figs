@@ -21,7 +21,7 @@ def create_figfile(base_dir, figfile)
   end
 end
 
-def create_non_existent_yaml1(locations)
+def create_non_existent_yaml(locations)
   locations.each do |file|
     if !File.exists?(file)
       puts "[Add] #{file} does not exist, creating."
