@@ -1,5 +1,6 @@
 require "git"
 
+require "figs/directory_flattener"
 module Figs
   module GitHandler
     extend self
@@ -8,7 +9,7 @@ module Figs
     def location(gitpath, filenames)
       @temp_files = []
       git_clone gitpath
-      temp_filenames(([]<< filenames).flatten)
+      temp_filenames(([]<< Figs::DirectoryFlattener.flattened_filenames(filenames.collect {|filename| "#{TMP_GIT_DIR}#{filename}"})).flatten)
     rescue Exception => e
       p e
       clear_tmp_dir
@@ -32,7 +33,7 @@ module Figs
     def copy_to_temp_files(filename)
       temp_file = Tempfile.new("#{filename.gsub('/','-')}")
       temp_file.open
-      temp_file.write(File.open("#{TMP_GIT_DIR}#{filename}").read)
+      temp_file.write(File.open("#{filename}").read)
       temp_file.flush
       @temp_files << temp_file
       temp_file.path

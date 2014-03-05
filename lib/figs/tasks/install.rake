@@ -23,7 +23,7 @@ end
 
 def create_non_existent_yaml(locations)
   locations.each do |file|
-    if !File.exists?(file)
+    if !File.exists?(file) && !Dir.exists?(file)
       puts "[Add] #{file} does not exist, creating."
       application_yml = File.expand_path("../../templates/application.yml", __FILE__)
       File.open(file, 'w+') do |f|

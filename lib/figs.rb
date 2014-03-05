@@ -1,6 +1,7 @@
 require "figs/application"
 require "figs/env"
 require "figs/figfile"
+require "figs/directory_flattener"
 
 module Figs
   extend self

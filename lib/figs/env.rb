@@ -1,4 +1,3 @@
-require 'hashie'
 module Figs
   module ENV
     extend self
