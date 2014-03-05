@@ -9,7 +9,8 @@ module Figs
       @temp_files = []
       git_clone gitpath
       temp_filenames(([]<< filenames).flatten)
-    rescue
+    rescue Exception => e
+      p e
       clear_tmp_dir
       clear_temp_files
     end
@@ -29,7 +30,7 @@ module Figs
     end
     
     def copy_to_temp_files(filename)
-      temp_file = Tempfile.new("#{filename}")
+      temp_file = Tempfile.new("#{filename.gsub('/','-')}")
       temp_file.open
       temp_file.write(File.open("#{TMP_GIT_DIR}#{filename}").read)
       temp_file.flush
