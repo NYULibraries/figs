@@ -4,6 +4,7 @@ require "yaml"
 require "figs/error"
 require "figs/env"
 require "figs/git_handler"
+require "figs/directory_flattener"
 
 module Figs
   class Application
@@ -23,11 +24,15 @@ module Figs
       figfile["locations"]
     end
     
+    def flattened_filenames(filenames)
+      Figs::DirectoryFlattener.flattened_filenames(filenames)
+    end
+    
     def load_path
       if figfile["method"].eql? "git"
-        @path = path_from_git(figfile["repo"], figfile["locations"])
+        @path = path_from_git(figfile["repo"], flattened_filenames(figfile["locations"]))
       else
-        @path = figfile["locations"]
+        @path = flattened_filenames(figfile["locations"])
       end
     end
     
