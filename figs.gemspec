@@ -18,7 +18,6 @@ Gem::Specification.new do |gem|
   gem.files       = Dir["{app,lib,config,bin}/**/*"] + ["Rakefile", "Gemfile", "README.md"]
 
   gem.add_development_dependency "rake", "~> 10.1"
-  gem.add_dependency "hashie", "~> 2.0.5"
   gem.add_dependency "git", "~> 1.2.6"
   
   gem.executables << "figsify"
