@@ -2,10 +2,10 @@ require "spec_helper"
 
 describe Figs do
   describe ".env" do
-    let(:figfile) { double(:figfile)}
+    let(:figsfile) { double(:figsfile)}
     
     before do
-      Figs.stub(:figfile) { YAML.load("locations: tmp/settings.yml\nmethod: path") }
+      Figs.stub(:figsfile) { YAML.load("locations: tmp/settings.yml\nmethod: path") }
     end
     
     it "falls through to Figs::ENV" do
@@ -33,12 +33,12 @@ describe Figs do
     let(:backend) { double(:backend) }
     let(:application) { double(:application) }
     let(:custom_application) { double(:custom_application) }
-    let(:figfile) { double(:figfile)}
+    let(:figsfile) { double(:figsfile)}
 
     before do
       Figs.stub(:backend) { backend }
       backend.stub(:new) { application }
-      Figs.stub(:figfile) { YAML.load("locations: tmp/settings.yml\nmethod: path") }
+      Figs.stub(:figsfile) { YAML.load("locations: tmp/settings.yml\nmethod: path") }
     end
 
     it "defaults to a new backend application" do

@@ -15,13 +15,13 @@ module Figs
     attr_writer :stage, :path
 
     def initialize(options = {})
-      @figfile = options[:file]
+      @figsfile = options[:file]
       @stage = options[:stage]
       load_path
     end
     
     def locations
-      figfile["locations"]
+      figsfile["locations"]
     end
     
     def flattened_filenames(filenames)
@@ -29,10 +29,10 @@ module Figs
     end
     
     def load_path
-      if figfile["method"].eql? "git"
-        @path = path_from_git(figfile["repo"], flattened_filenames(figfile["locations"]))
+      if figsfile["method"].eql? "git"
+        @path = path_from_git(figsfile["repo"], flattened_filenames(figsfile["locations"]))
       else
-        @path = flattened_filenames(figfile["locations"])
+        @path = flattened_filenames(figsfile["locations"])
       end
     end
     
@@ -44,8 +44,8 @@ module Figs
       end
     end
     
-    def figfile
-      (@figfile || default_figfile)
+    def figsfile
+      (@figsfile || default_figsfile)
     end
 
     def path
@@ -86,7 +86,7 @@ module Figs
       "test"
     end
     
-    def default_figfile
+    def default_figsfile
       raise NotImplementedError
     end
 

@@ -1,5 +1,5 @@
 module Figs
-  class Figfile
+  class Figsfile
     attr_reader :locations, :method, :repo
     def initialize(*args)
       @repo = args.shift if args.first.downcase.end_with?(".git")
