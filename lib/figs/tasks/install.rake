@@ -28,7 +28,19 @@ def create_non_existent_yaml(locations)
       application_yml = File.expand_path("../../templates/application.yml", __FILE__)
       File.open(file, 'w+') do |f|
         f.write(ERB.new(File.read(application_yml)).result(binding))
+        ignore_configuration(f.path)
       end
+    end
+  end
+end
+
+def ignore_configuration(application_yml)
+  if File.exists?(".gitignore")
+    File.open('.gitignore', 'a') do |file|
+      file.write(<<-EOF)
+# Ignore application configuration
+#{application_yml}
+EOF
     end
   end
 end
