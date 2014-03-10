@@ -1,19 +1,19 @@
 require "spec_helper"
 
-describe Figs::Figfile do
-  subject (:path_figfile) { Figs::Figfile.new("a","b","c") }
-  subject (:git_figfile) { Figs::Figfile.new("a.git","b","c") }
+describe Figs::Figsfile do
+  subject (:path_figsfile) { Figs::Figsfile.new("a","b","c") }
+  subject (:git_figsfile) { Figs::Figsfile.new("a.git","b","c") }
   
-  it { should be_a(Figs::Figfile) }
+  it { should be_a(Figs::Figsfile) }
   
   describe "#method" do
     context 'when it is a path location' do
-      subject { path_figfile.method }
+      subject { path_figsfile.method }
       
       it { should eq("path") }
     end
     context 'when it is a git location' do
-      subject { git_figfile.method }
+      subject { git_figsfile.method }
       
       it { should eq("git") }
     end
@@ -21,13 +21,13 @@ describe Figs::Figfile do
   
   describe "#locations" do
     context 'when it is a path location' do
-      subject { path_figfile.locations }
+      subject { path_figsfile.locations }
       
       it { should be_a(Array) }
       it { should eq(["a","b","c"]) }
     end
     context 'when it is a git location' do
-      subject { git_figfile.locations }
+      subject { git_figsfile.locations }
       
       it { should be_a(Array) }
       it { should eq(["b","c"]) }
@@ -36,20 +36,20 @@ describe Figs::Figfile do
   
   describe "#repo" do
     context 'when it is a path location' do
-      subject { path_figfile.repo }
+      subject { path_figsfile.repo }
       it { should be(nil) }
     end
     context 'when it is a git location' do
-      subject { git_figfile.repo }
+      subject { git_figsfile.repo }
       it { should eq("a.git") }
     end
   end
   
   describe ".to_yaml" do
     context 'when it is a path location' do
-      subject { path_figfile.to_yaml }
+      subject { path_figsfile.to_yaml }
       it { should eq(<<-YAML) }
---- !ruby/object:Figs::Figfile
+--- !ruby/object:Figs::Figsfile
 locations:
 - a
 - b
@@ -58,9 +58,9 @@ method: path
 YAML
     end
     context 'when it is a git location' do
-      subject { git_figfile.to_yaml }
+      subject { git_figsfile.to_yaml }
       it { should eq(<<-YAML) }
---- !ruby/object:Figs::Figfile
+--- !ruby/object:Figs::Figsfile
 repo: a.git
 locations:
 - b
@@ -72,11 +72,11 @@ YAML
   
   describe "#[]" do
     context 'when it is a path location' do
-      subject { path_figfile["method"] }
+      subject { path_figsfile["method"] }
       it { should eq("path") }
     end
     context 'when it is a git location' do
-      subject { git_figfile["method"] }
+      subject { git_figsfile["method"] }
       it { should eq("git") }
     end
   end

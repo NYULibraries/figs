@@ -1,6 +1,6 @@
 require "figs/application"
 require "figs/env"
-require "figs/figfile"
+require "figs/figsfile"
 require "figs/directory_flattener"
 
 module Figs
@@ -17,7 +17,7 @@ module Figs
   end
 
   def application(options = {})
-    @application ||= backend.new({:file => figfile, :stage => options[:stage]})
+    @application ||= backend.new({:file => figsfile, :stage => options[:stage]})
   end
 
   def load(options = {})
@@ -26,7 +26,7 @@ module Figs
   
   private
   
-  def figfile
-    @figfile ||=YAML.load(ERB.new(File.read('Figfile')).result)
+  def figsfile
+    @figsfile ||=YAML.load(ERB.new(File.read('Figsfile')).result)
   end
 end

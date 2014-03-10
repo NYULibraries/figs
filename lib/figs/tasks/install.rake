@@ -1,23 +1,23 @@
 require 'erb'
 require 'pathname'
-require 'figs/figfile'
+require 'figs/figsfile'
 desc 'Install Fig'
 task :install do |task, args|
   base_dir = Pathname.new('.')
   locations = args.extras.empty? ? "application.yml" :  args.extras
-  figfile = Figs::Figfile.new(*locations)
+  figsfile = Figs::Figsfile.new(*locations)
   
-  create_figfile base_dir, figfile
-  create_non_existent_yaml(figfile.locations) if figfile.method.eql?("path")
+  create_figsfile base_dir, figsfile
+  create_non_existent_yaml(figsfile.locations) if figsfile.method.eql?("path")
   
   puts "[Done] Enjoy your figs sir!"
 end
 
-def create_figfile(base_dir, figfile)
+def create_figsfile(base_dir, figsfile)
   puts "Figsifying #{base_dir}/ ..."
-  file = base_dir.join('Figfile')
+  file = base_dir.join('Figsfile')
   File.open(file, 'w+') do |f|
-    f.write(figfile.to_yaml)
+    f.write(figsfile.to_yaml)
   end
 end
 

@@ -6,7 +6,7 @@ module Figs
   describe Application do
     before do
       Application.any_instance.stub(
-        default_figfile: "",
+        default_figsfile: "",
         default_path: "/path/to/app/config/application.yml",
         default_stage: "development"
       )
@@ -110,12 +110,12 @@ module Figs
         @tmpfile
       end
       
-      def from_figfile(path)
+      def from_figsfile(path)
         YAML.load("locations: #{path}\nmethod: path")
       end
 
       it "loads values from YAML" do
-        application = Application.new(file: from_figfile(yaml_to_tmp_file(<<-YAML).path))
+        application = Application.new(file: from_figsfile(yaml_to_tmp_file(<<-YAML).path))
 foo: bar
 YAML
 
@@ -123,7 +123,7 @@ YAML
       end
 
       it "merges environment-specific values" do
-        application = Application.new(file: from_figfile(yaml_to_tmp_file(<<-YAML).path), stage: "test")
+        application = Application.new(file: from_figsfile(yaml_to_tmp_file(<<-YAML).path), stage: "test")
 foo: bar
 test:
   foo: baz
@@ -133,7 +133,7 @@ YAML
       end
 
 #       it "drops unused environment-specific values" do
-#         application = Application.new(file: from_figfile(yaml_to_tmp_file(<<-YAML).path), stage: "test")
+#         application = Application.new(file: from_figsfile(yaml_to_tmp_file(<<-YAML).path), stage: "test")
 # foo: bar
 # test:
 #   foo: baz
@@ -165,7 +165,7 @@ YAML
       end
 
       it "processes ERB" do
-        application = Application.new(file: from_figfile(yaml_to_tmp_file(<<-YAML).path))
+        application = Application.new(file: from_figsfile(yaml_to_tmp_file(<<-YAML).path))
 foo: <%= "bar".upcase %>
 YAML
 
@@ -192,7 +192,7 @@ YAML
       end
 
 #       it "follows a changing default environment" do
-#         application = Application.new(file: from_figfile(yaml_to_tmp_file(<<-YAML).path))
+#         application = Application.new(file: from_figsfile(yaml_to_tmp_file(<<-YAML).path))
 # foo: bar
 # test:
 #   foo: baz
@@ -209,7 +209,7 @@ YAML
       it "picks up yaml from multiple files" do
         @temp_file1 = yaml_to_tmp_file("fooz: barz")
         @temp_file2 = yaml_to_tmp_file("foos: bars")
-        application = Application.new(file: from_figfile("\n- #{@temp_file1.path}\n- #{@temp_file2.path}"))
+        application = Application.new(file: from_figsfile("\n- #{@temp_file1.path}\n- #{@temp_file2.path}"))
         
         expect(application.configuration).to eq("fooz" => "barz", "foos" => "bars") 
         @temp_file1.close
