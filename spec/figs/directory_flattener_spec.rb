@@ -6,10 +6,10 @@ describe Figs::DirectoryFlattener do
   def create_tmp_dir
     FileUtils.mkdir_p("#{SPEC_TMP_DIR}")
     FileUtils.mkdir_p("#{SPEC_TMP_DIR}/#{SPEC_TMP_DIR}")
-    File.open("#{SPEC_TMP_DIR}/#{SPEC_TMP_DIR}/config.yml", File::WRONLY|File::CREAT)
-    File.open("#{SPEC_TMP_DIR}/#{SPEC_TMP_DIR}/config2.yml", File::WRONLY|File::CREAT)
     File.open("#{SPEC_TMP_DIR}/config.yml", File::WRONLY|File::CREAT)
     File.open("#{SPEC_TMP_DIR}/config2.yml", File::WRONLY|File::CREAT)
+    File.open("#{SPEC_TMP_DIR}/#{SPEC_TMP_DIR}/config.yml", File::WRONLY|File::CREAT)
+    File.open("#{SPEC_TMP_DIR}/#{SPEC_TMP_DIR}/config2.yml", File::WRONLY|File::CREAT)
   end
   
   before(:each) do
