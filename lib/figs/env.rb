@@ -5,9 +5,35 @@ module Figs
     def env
      @env ||= ::ENV
     end
-    
+
+    # Since Ruby's implementation of YAML has a set of "basic types" that are
+    # implicitly converted from String to the appropriate type, we convert the
+    # "basic types" to strings (appropriately) and store them in ENV, so that
+    # a Figs application can just call ENV['VAR_NAME'] for "basic types"
+    # Basic Types handled are
+    #   - Integer
+    #   - Float
+    #   - Null
+    #   - Boolean
+    #   - Time (in the ISO8601 format)
+    #   - Date (in the ISO8601 format)
     def set(key,value)
-      env[key.to_s] = value.is_a?(String) ? value : YAML::dump(value)
+      env[key.to_s] = begin
+        case value
+        when String
+          value
+        when Integer, Float
+          value.to_s
+        when FalseClass, TrueClass
+          value.to_s
+        when Time, Date
+          value.iso8601
+        when NilClass
+          '~'
+        else
+          YAML::dump(value)
+        end
+      end
     end
     
     def [](key)
