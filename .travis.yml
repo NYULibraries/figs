@@ -16,4 +16,13 @@ rvm:
   - 2.0.0
   - 2.1.0
   - ruby-head
+  - jruby-19mode
+  - jruby-head
+
+jdk:
+  - openjdk7
+  - openjdk6
+  - oraclejdk7
+  - oraclejdk8
+  
 script: bundle exec rspec
