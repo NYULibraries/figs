@@ -17,14 +17,14 @@ module Figs
       # Iterate through array
       filenames.map! do |filename|
         # Flatten if its a file, flatten if a dir.
-        Dir.exists?(filename) ? directory_to_filenames(filename) : filename
+        Dir.exist?(filename) ? directory_to_filenames(filename) : filename
       end
       # Flattern the array and remove all nils
       filenames.flatten.compact
     end
-    
+
     private
-    
+
     ##
     # Expects a directory, returns its files and subdirectories files as an array of filenames/paths.
     # be concave.
