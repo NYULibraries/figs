@@ -227,12 +227,13 @@ YAML
 
     describe "#load" do
       let!(:application) { Application.new }
+      let(:configuration) { { "foo" => "bar" } }
 
       before do
         ::ENV.delete("foo")
         ::ENV.delete("_FIGS_foo")
 
-        allow(application).to receive(:configuration).and_return({ "foo" => "bar" })
+        allow(application).to receive(:configuration).and_return(configuration)
       end
 
       it "merges values into ENV" do
@@ -253,33 +254,42 @@ YAML
         }
       end
 
-      it "sets keys that have already been set internally" do
-        application.load
+      context "with second application" do
+        let(:application2){ Application.new }
+        let(:configuration2){ { "foo" => "baz" } }
+        before do
+          allow(application2).to receive(:configuration).and_return(configuration2)
+        end
 
-        application2 = Application.new
-        allow(application2).to receive(:configuration).and_return({ "foo" => "baz" })
+        it "sets keys that have already been set internally" do
+          application.load
 
-        expect {
-          application2.load
-        }.to change {
-          ::ENV["foo"]
-        }.from("bar").to("baz")
+          expect {
+            application2.load
+          }.to change {
+            ::ENV["foo"]
+          }.from("bar").to("baz")
+        end
       end
 
-      it "DOES NOT warn when a key isn't a string" do
-        allow(application).to receive(:configuration).and_return({ foo: "baz" })
+      context "when a key isn't a string" do
+        let(:configuration){ { foo: "baz" } }
 
-        expect(application).to_not receive(:warn)
+        it "DOES NOT warn" do
+          expect(application).to_not receive(:warn)
 
-        application.load
+          application.load
+        end
       end
 
-      it "DOES NOT warn when a value isn't a string" do
-        allow(application).to receive(:configuration).and_return({ "foo" => ["bar"] })
+      context "when a value isn't a string" do
+        let(:configuration){ { "foo" => ["bar"] } }
 
-        expect(application).to_not receive(:warn)
+        it "DOES NOT warn" do
+          expect(application).to_not receive(:warn)
 
-        application.load
+          application.load
+        end
       end
     end
   end
