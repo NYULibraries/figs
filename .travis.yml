@@ -1,8 +1,5 @@
 before_install:
   - gem update bundler
-branches:
-  only:
-    - master
 language: ruby
 matrix:
   allow_failures:
@@ -20,5 +17,5 @@ jdk:
   - openjdk7
   - oraclejdk7
   - oraclejdk8
-  
+
 script: bundle exec rspec
