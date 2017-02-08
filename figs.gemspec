@@ -20,5 +20,8 @@ Gem::Specification.new do |gem|
   gem.add_dependency "rake", ">= 10.1"
   gem.add_dependency "git", "~> 1.2.6"
 
+  gem.add_development_dependency "coveralls", "~> 0.7"#, require: false
+  gem.add_development_dependency "rspec", "~> 3.0"
+
   gem.executables << "figsify"
 end
