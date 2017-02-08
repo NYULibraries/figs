@@ -14,11 +14,11 @@ Gem::Specification.new do |gem|
   gem.description = "Simple app configuration using ENV and YAML files"
   gem.homepage    = "https://github.com/NYULibraries/figs"
   gem.license     = "MIT"
-  
+
   gem.files       = Dir["{app,lib,config,bin}/**/*"] + ["Rakefile", "Gemfile", "README.md"]
 
-  gem.add_dependency "rake", "~> 10.1"
+  gem.add_dependency "rake", ">= 10.1"
   gem.add_dependency "git", "~> 1.2.6"
-  
+
   gem.executables << "figsify"
 end
