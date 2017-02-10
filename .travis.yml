@@ -12,16 +12,12 @@ matrix:
       rvm: 2.0.0
       env: COVERAGE=1
 rvm:
-  - 1.9.3
-  - 2.0.0
-  - 2.1.0
+  - 2.2.3
   - ruby-head
-  - jruby-19mode
-  - jruby-head
+  - jruby-9.1.7.0
 
 jdk:
   - openjdk7
-  - openjdk6
   - oraclejdk7
   - oraclejdk8
   
