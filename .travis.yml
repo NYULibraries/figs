@@ -4,10 +4,7 @@ language: ruby
 matrix:
   allow_failures:
     - rvm: ruby-head
-  include:
-    - gemfile: Gemfile
-      rvm: 2.0.0
-      env: COVERAGE=1
+    - jdk: oraclejdk8
 rvm:
   - 2.1.10
   - 2.2.6
