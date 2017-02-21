@@ -1,18 +1,14 @@
 before_install:
   - gem update bundler
-branches:
-  only:
-    - master
 language: ruby
 matrix:
   allow_failures:
     - rvm: ruby-head
-  include:
-    - gemfile: Gemfile
-      rvm: 2.0.0
-      env: COVERAGE=1
+    - jdk: oraclejdk8
 rvm:
-  - 2.2.3
+  - 2.2.6
+  - 2.3.3
+  - 2.4.0
   - ruby-head
   - jruby-9.1.7.0
 
@@ -20,5 +16,5 @@ jdk:
   - openjdk7
   - oraclejdk7
   - oraclejdk8
-  
+
 script: bundle exec rspec
