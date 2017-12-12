@@ -4,3 +4,4 @@
 /gemfiles/*.gemfile.lock
 /pkg
 /tmp
+*.gem
