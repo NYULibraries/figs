@@ -11,16 +11,16 @@ describe Figs::DirectoryFlattener do
     File.open("#{SPEC_TMP_DIR}/#{SPEC_TMP_DIR}/config.yml", File::WRONLY|File::CREAT)
     File.open("#{SPEC_TMP_DIR}/#{SPEC_TMP_DIR}/config2.yml", File::WRONLY|File::CREAT)
   end
-  
+
   before(:each) do
     create_tmp_dir
   end
   subject (:directoryflattener) { Figs::DirectoryFlattener.flattened_filenames([SPEC_TMP_DIR]) }
-  
+
   describe "#flattened_filenames" do
     context "directories" do
-      subject { directoryflattener } 
-      it { should eq(["tmp/flattener/config.yml", "tmp/flattener/config2.yml", "tmp/flattener/tmp/flattener/config.yml", "tmp/flattener/tmp/flattener/config2.yml"]) }
+      subject { directoryflattener }
+      it { should match_array ["tmp/flattener/config.yml", "tmp/flattener/config2.yml", "tmp/flattener/tmp/flattener/config.yml", "tmp/flattener/tmp/flattener/config2.yml"] }
     end
   end
 end

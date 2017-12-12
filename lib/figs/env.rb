@@ -1,7 +1,9 @@
+require 'date'
+require 'time'
 module Figs
   module ENV
     extend self
-    
+
     def env
      @env ||= ::ENV
     end
@@ -35,25 +37,25 @@ module Figs
         end
       end
     end
-    
+
     def [](key)
       return demarshall(env[key.to_s])
     end
-    
+
     def []=(key,value)
       set(key, value)
     end
-    
+
     def demarshall(value)
       value.nil? ? nil : YAML::load(value)
     end
-    
+
     def method_missing(method, *args, &block)
       if matches_env?(method) then return env.send(method, *args, &block) end
-      
+
       key, punctuation = extract_key_from_method(method)
       _, value = env.detect { |k, _| k.upcase == key }
-      
+
       value = demarshall(value)
 
       case punctuation
@@ -71,7 +73,7 @@ module Figs
     def missing_key!(key)
       raise MissingKey.new("Missing required Figaro configuration key #{key.inspect}.")
     end
-    
+
     def respond_to?(method, *)
       return true if matches_env?(method)
       key, punctuation = extract_key_from_method(method)
@@ -82,7 +84,7 @@ module Figs
       else super
       end
     end
-    
+
     def matches_env?(method)
       env.respond_to?(method)
     end
