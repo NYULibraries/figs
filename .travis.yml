@@ -4,12 +4,10 @@ before_install:
 language: ruby
 matrix:
   allow_failures:
-    - rvm:
-      - ruby-head
-      - jruby-head
-    - jdk:
-      - oraclejdk8
-      - oraclejdk7
+    - rvm: ruby-head
+    - rvm: jruby-head
+    - jdk: oraclejdk8
+    - jdk: oraclejdk7
 rvm:
   - 2.2.6
   - 2.3.3
@@ -24,3 +22,5 @@ jdk:
   - oraclejdk8
 
 script: bundle exec rspec
+
+sudo: false
