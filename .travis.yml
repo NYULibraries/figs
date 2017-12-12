@@ -1,9 +1,12 @@
 before_install:
   - gem install bundler
+  - gem update bundler
 language: ruby
 matrix:
   allow_failures:
-    - rvm: ruby-head
+    - rvm:
+      - ruby-head
+      - jruby-head
     - jdk:
       - oraclejdk8
       - oraclejdk7
@@ -12,7 +15,8 @@ rvm:
   - 2.3.3
   - 2.4.0
   - ruby-head
-  - jruby-9.1.7.0
+  - jruby-9.1.9.0
+  - jruby-head
 
 jdk:
   - openjdk7
