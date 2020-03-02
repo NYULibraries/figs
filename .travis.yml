@@ -1,13 +1,5 @@
-before_install:
-  - gem install bundler
-  - gem update bundler
+sudo: false
 language: ruby
-matrix:
-  allow_failures:
-    - rvm: ruby-head
-    - rvm: jruby-head
-    - jdk: oraclejdk8
-    - jdk: oraclejdk7
 rvm:
   - 2.2.6
   - 2.3.3
@@ -17,12 +9,8 @@ rvm:
   - ruby-head
   - jruby-9.1.9.0
   - jruby-head
-
-jdk:
-  - openjdk7
-  - oraclejdk7
-  - oraclejdk8
-
+before_install:
+  - gem install bundler
+  - gem update bundler
 script: bundle exec rspec
 
-sudo: false
